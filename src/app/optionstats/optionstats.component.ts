@@ -1,5 +1,6 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { File } from '../file';
+import {TimeService} from '../time.service';
 
 @Component({
   selector: 'app-optionstats',
@@ -8,8 +9,19 @@ import { File } from '../file';
 })
 export class OptionstatsComponent implements OnInit {
   @Input() file: File;
-  constructor() { }
+  modifiedDate: string;
+  convertTimestamp() {
+    if(!!this.file) {
+      this.modifiedDate = this.timeService.convertTimestamp(this.file.modifiedDate);
+    }
+  }
+  constructor(private timeService: TimeService) { }
 
   ngOnInit() {
+    this.convertTimestamp();
   }
+  ngDoCheck() {
+    this.convertTimestamp();
+  }
+
 }

@@ -4,4 +4,5 @@ export class File {
   extension: string;
   size: number;
   children: File[];
+  modifiedDate: number;
 }

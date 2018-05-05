@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { File } from '../file';
+import {TimeService} from '../time.service';
 
 @Component({
   selector: 'app-sumstats',
@@ -25,7 +26,7 @@ export class SumstatsComponent implements OnInit {
     }
   }
 
-  constructor() {
+  constructor(private timeService: TimeService) {
   }
 
   ngOnInit() {
