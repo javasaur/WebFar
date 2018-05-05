@@ -10,9 +10,9 @@ import { File } from '../file';
 export class FilesComponent implements OnInit {
   @Input() currentFolder;
   files: File[];
+  @Input() selectedFile: File;
   @Output() selectFileClick: EventEmitter<File> = new EventEmitter<File>();
   selectFile(event, file): void {
-    console.log(file);
     this.selectFileClick.emit(file);
   }
   @Output() openFileClick: EventEmitter<File> = new EventEmitter<File>();

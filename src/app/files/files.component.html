@@ -2,9 +2,9 @@
   <tr>
     <td class="left">
       <table>
-        <tr *ngFor="let file of files; let i=index">
-          <td *ngIf="i <= files.length / 2" class="content">
-            <span class="filename" (click)="selectFile($event, file)" (dblclick)="openFile($event, file)">{{ file.name }}
+        <tr *ngFor="let file of files; let i=index" class="option">
+          <td *ngIf="i <= files.length / 2" class="content" [class.selected]="file === selectedFile" (click)="selectFile($event, file)" (dblclick)="openFile($event, file)">
+            <span class="filename" >{{ file.name }}
               <span *ngIf="file.extension">.<span class="extension">{{ file.extension }}</span></span></span>
           </td>
         </tr>
@@ -13,9 +13,9 @@
 
     <td class="right">
       <table>
-        <tr *ngFor="let file of files; let i=index">
-          <td *ngIf="i > files.length / 2" class="content">
-            <span class="filename" (click)="selectFile($event, file)" (dblclick)="openFile($event, file)">{{ file.name }}
+        <tr *ngFor="let file of files; let i=index" class="option">
+          <td *ngIf="i > files.length / 2" class="content" [class.selected]="file === selectedFile" (click)="selectFile($event, file)" (dblclick)="openFile($event, file)">
+            <span class="filename">{{ file.name }}
               <span *ngIf="file.extension">.<span class="extension">{{ file.extension }}</span></span></span>
           </td>
         </tr>

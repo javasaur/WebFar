@@ -15,7 +15,7 @@
   width: 100%;
 }
 
-.filename:hover {
+tr.option:hover {
   background-color: cornflowerblue;
   cursor: pointer;
 }
@@ -32,6 +32,11 @@ td.right, td.left {
 
 td.content {
   padding-left: 5px;
+  width: 100%;
+}
+
+td.content.selected {
+  background-color: cornflowerblue;
 }
 
 .extension {
