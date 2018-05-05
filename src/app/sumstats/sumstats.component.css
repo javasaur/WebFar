@@ -1,0 +1,15 @@
+.wrapper {
+  border: 2px solid cornflowerblue;
+  background-color: blue;
+  color: aliceblue;
+  height: 35px;
+}
+
+.wrapper {
+  padding: 5px;
+}
+
+.wrapper .info {
+  color: #ffb5bb;
+  font-weight: bold;
+}
