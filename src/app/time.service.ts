@@ -7,7 +7,8 @@ import { Observable } from 'rxjs';
 export class TimeService {
   getCurrentTime() {
     const d = new Date();
-    const str = d.getHours() + ':' + d.getMinutes();
+    const mins = (d.getMinutes()).toString().padStart(2, '0');
+    const str = d.getHours() + ':' + mins;
     return str;
   }
   constructor() { }
