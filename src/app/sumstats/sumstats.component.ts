@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { File } from '../file';
 
 @Component({
@@ -8,11 +8,12 @@ import { File } from '../file';
 })
 export class SumstatsComponent implements OnInit {
   @Input() currentFolder: File;
-  fileNum = 0;
-  folderNum = 0;
-  sizeSum = 0;
+  fileNum: number
+  folderNum: number;
+  sizeSum: number;
 
   calculateStats(): void {
+    this.fileNum = this.folderNum = this.sizeSum = 0;
     for (let i = 0; i < this.currentFolder.children.length; i++) {
       const f = this.currentFolder.children[i];
       if (f.type === 'folder') {
@@ -28,6 +29,9 @@ export class SumstatsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.calculateStats();
+  }
+  ngDoCheck() {
     this.calculateStats();
   }
 }
