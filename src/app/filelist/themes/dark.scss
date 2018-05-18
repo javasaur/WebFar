@@ -1,0 +1,21 @@
+.dark.menuHeader, .dark.sumStats, .dark.optionStats, .dark.filelist {
+  background-color: #2e3030;
+  color: #FFF;
+  border: 2px solid white;
+}
+
+.dark .info {
+  color: #ffa011;
+}
+
+.dark .selected {
+  background-color: grey;
+}
+
+.dark .option:hover {
+  background-color: grey;
+}
+
+.dark .extension {
+  color: #ffa011;
+}

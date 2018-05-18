@@ -1,0 +1,21 @@
+.classic.menuHeader, .classic.sumStats, .classic.optionStats, .classic.filelist {
+  background-color: blue;
+  color: aliceblue;
+  border: 2px solid cornflowerblue;
+}
+
+.classic .info {
+  color: #ffb5bb;
+}
+
+.classic .selected {
+  background-color: cornflowerblue;
+}
+
+.classic .option:hover {
+  background-color: cornflowerblue;
+}
+
+.classic .extension {
+  color: aquamarine;
+}

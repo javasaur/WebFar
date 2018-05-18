@@ -1,3 +1,10 @@
-<div id="mainWrapper">
-  <app-mainscreen></app-mainscreen>
-</div>
+<app-filelist
+  [themeClass]="activeTheme"
+  [eventKey]="leftScreenEventKey"
+  [isActiveScreen]="isLeftScreenActive">
+</app-filelist>
+<app-filelist
+  [themeClass]="activeTheme"
+  [eventKey]="rightScreenEventKey"
+  [isActiveScreen]="!isLeftScreenActive">
+</app-filelist>

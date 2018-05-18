@@ -1,0 +1,77 @@
+:host {
+  flex: 1 1 50%;
+  height: 100%;
+  border: 11px solid #000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Blocks and structuring */
+.menuHeader, .sumStats, .optionStats, .filelist {
+  width: 100%;
+  padding: 5px;
+}
+
+.test .filelist {
+  color: bisque;
+}
+
+.filelist {
+  flex: 1 1;
+}
+
+.optionStats {
+  height: 35px;
+}
+
+.sumStats {
+  height: 35px;
+}
+
+.menuHeader div {
+  flex: 1 1 50%;
+}
+
+.menuHeader .left {
+  text-align: left;
+}
+
+.menuHeader .right {
+  text-align: right;
+}
+
+.menuHeader {
+  display: flex;
+}
+
+/* Content formatting*/
+.info {
+  font-weight: bold;
+}
+
+.filelist ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.filelist ul li {
+  padding: 5px;
+}
+
+.filename {
+  font-family: Calibri, sans-serif;
+  width: 100%;
+}
+
+.extension {
+  font-weight: bold;
+}
+
+.selected {
+
+}
+
+.option:hover {
+  cursor: pointer;
+}
