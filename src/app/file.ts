@@ -19,6 +19,9 @@ export class File {
   private _path: string;
   private _hasParent: boolean
 
+  public isFile(): boolean {
+    return this._type === 'file';
+  }
 
   get hasParent(): boolean {
     return this._hasParent;

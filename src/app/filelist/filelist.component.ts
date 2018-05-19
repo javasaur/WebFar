@@ -65,6 +65,12 @@ export class FilelistComponent implements OnInit, DoCheck {
   }
 
   openFile(file: File) {
+    if (file.isFile()) {
+      console.log('opening: ', file.name);
+      this.filesService.passControlToOS(file);
+      return;
+    }
+
     this.currentFolder = file;
     this.selectedFile = undefined;
     this.filesService.path = file.path;
@@ -84,6 +90,8 @@ export class FilelistComponent implements OnInit, DoCheck {
     this.selectedFile = null;
     this.currentIndex = 0;
   }
+
+
 
   traverseUp() {
     this.traverse(-1);

@@ -58,7 +58,7 @@ export class FilesService {
             subfolder.filename = subfolder.filename.slice(0, -extension.length - 1);
           }
           const f1 = new FileBuilder()
-            .type('folder')
+            .type(subfolder.type)
             .name(subfolder.filename)
             .extension(extension)
             .size(subfolder.stats.size)
@@ -68,6 +68,8 @@ export class FilesService {
             .build();
           res.push(f1);
         });
+
+        console.log(res);
 
         // if (!!prevParent) {
         //   res.unshift(prevParent);
@@ -115,5 +117,13 @@ export class FilesService {
       path: dir
     };
     return this.http.post('http://localhost:3000/parent', body).toPromise();
+  }
+
+  public async passControlToOS(file) {
+    const body = {
+      path: file.path
+    };
+    console.log('body: ', body);
+    return this.http.post('http://localhost:3000/file', body).toPromise();
   }
 }
