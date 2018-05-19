@@ -6,25 +6,24 @@
   flex-direction: column;
 }
 
-/* Blocks and structuring */
-.menuHeader, .sumStats, .optionStats, .filelist {
+/* Main blocks */
+:host div.block {
+  border-size: 2px;
+  border-style: solid;
+  border-collapse: collapse;
   width: 100%;
   padding: 5px;
 }
 
-.test .filelist {
-  color: bisque;
+:host div.block + div.block {
+  border-top: none;
 }
 
 .filelist {
   flex: 1 1;
 }
 
-.optionStats {
-  height: 35px;
-}
-
-.sumStats {
+.optionStats, .sumStats {
   height: 35px;
 }
 
@@ -44,7 +43,7 @@
   display: flex;
 }
 
-/* Content formatting*/
+/* Content */
 .info {
   font-weight: bold;
 }
@@ -60,16 +59,11 @@
 }
 
 .filename {
-  font-family: Calibri, sans-serif;
   width: 100%;
 }
 
 .extension {
   font-weight: bold;
-}
-
-.selected {
-
 }
 
 .option:hover {

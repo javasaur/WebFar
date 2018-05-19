@@ -1,4 +1,4 @@
-<div class="menuHeader" [ngClass]=themeClass>
+<div class="menuHeader block" [ngClass]=themeClass>
   <div class="left">
     <span class="content">Current folder: <span class="info">{{ currentFolder.name }}</span></span>
   </div>
@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<div class="filelist" [ngClass]=themeClass>
+<div class="filelist block" [ngClass]=themeClass>
   <ul>
     <li *ngFor="let file of files"
         class="content option"
@@ -20,7 +20,7 @@
   </ul>
 </div>
 
-<div class="optionStats" [ngClass]=themeClass>
+<div class="optionStats block" [ngClass]=themeClass>
   <div *ngIf="selectedFile"><span class="info">{{ selectedFile.name }}</span>;
     Type: <span class="info">{{ selectedFile.type }}</span>;
     Size: <span class="info">{{ selectedFile.size }}b</span>
@@ -29,7 +29,7 @@
   <div *ngIf="!selectedFile" class="info">No file/folder selected</div>
 </div>
 
-<div class="sumStats" [ngClass]=themeClass>
+<div class="sumStats block" [ngClass]=themeClass>
   <span class="info">Files: </span> {{ sumStatsFiles }}
   <span class="info">Folders: </span> {{ sumStatsFolders }}
   <span class="info">Size: </span> {{ sumStatsSize }}b
