@@ -11,37 +11,50 @@ export class AppComponent implements OnInit {
   constructor() {
     this.themes = ['classic', 'dark'];
   }
-  @Output() rightScreenEventKey: string;
-  @Output() leftScreenEventKey: string;
+  // @Output() rightScreenEventKey: string;
+  // @Output() leftScreenEventKey: string;
   @Output() isLeftScreenActive: boolean;
+  @Output() leftScreenEvent: any;
+  @Output() rightScreenEvent: any;
   activeTheme: string;
   themes: Array<string>;
   title = 'WebFar';
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
+    console.log(typeof event.timeStamp);
+    console.log('passing key: ', event.key);
     const key = event.key;
 
     if (key === 'q') {
       this.switchTheme();
-      return;
     }
 
     if (key === 'ArrowLeft' || key === 'ArrowRight') {
       this.switchScreen();
     }
-    this.isLeftScreenActive ? this.setEventToLeftScreen(key) : this.setEventToRightScreen(key);
+    // this.isLeftScreenActive ? this.setEventToLeftScreen(key) : this.setEventToRightScreen(key);
+    this.isLeftScreenActive ? this.passEventToLeftScreen(event) : this.passEventToRightScreen(event);
   }
 
-  setEventToLeftScreen(eventKey) {
-    this.leftScreenEventKey = eventKey;
-    this.rightScreenEventKey = null;
+  passEventToLeftScreen(event) {
+    this.leftScreenEvent = event;
   }
 
-  setEventToRightScreen(eventKey) {
-    this.rightScreenEventKey = eventKey;
-    this.leftScreenEventKey = null;
+  passEventToRightScreen(event) {
+    this.rightScreenEvent = event;
   }
+
+  // setEventToLeftScreen(eventKey) {
+  //   console.log('passing to left screen: ', eventKey);
+  //   this.leftScreenEventKey = eventKey;
+  //   this.rightScreenEventKey = null;
+  // }
+
+  // setEventToRightScreen(eventKey) {
+  //   this.rightScreenEventKey = eventKey;
+  //   this.leftScreenEventKey = null;
+  // }
 
   activateLeftScreen() {
     this.isLeftScreenActive = true;

@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck, OnChanges, Input, AfterContentInit } from '@angular/core';
+import { Component, OnInit, DoCheck, OnChanges, Input } from '@angular/core';
 import { File } from '../file';
 import {TimeService} from '../time.service';
 import {FilesService} from '../files.service';
@@ -25,7 +25,8 @@ export class FilelistComponent implements OnInit, DoCheck {
   sumStatsSize: number;
   @Input() themeClass: string;
   @Input() isActiveScreen: boolean;
-  @Input() eventKey: string;
+  @Input() keyEvent: any;
+  lastKeyPressTimestamp: number;
 
   setFiles() {
     this.files = this.currentFolder.children;
@@ -105,8 +106,15 @@ export class FilelistComponent implements OnInit, DoCheck {
   }
 
   reactToKeypress() {
-    const key = this.eventKey;
-    switch (key) {
+    const e = this.keyEvent;
+    if (!e) {
+      return;
+    }
+    if (e.timeStamp === this.lastKeyPressTimestamp) {
+      return;
+    }
+    console.log(e.key);
+    switch (e.key) {
       // Unset the position only if switched screen
       case 'ArrowLeft':
       case 'ArrowRight':
@@ -124,13 +132,16 @@ export class FilelistComponent implements OnInit, DoCheck {
       default:
         break;
     }
+    this.lastKeyPressTimestamp = e.timeStamp;
   }
 
   constructor(private timeService: TimeService, private filesService: FilesService, private ref: ChangeDetectorRef) {
     this.themeClass = 'classic';
+    this.lastKeyPressTimestamp = 0;
   }
 
   ngOnInit() {
+    // console.log('ngOnInit key: ', this.eventKey);
       this.filesService.UpdateFileState(null).then(() => {
         this.currentFolder = this.filesService.fileState;
         this.setCurrentTime(this);
@@ -149,6 +160,7 @@ export class FilelistComponent implements OnInit, DoCheck {
     this.files = this.currentFolder.children;
     this.calculateStats();
     this.convertTimestamp();
+    // console.log('inside ngDoCheck: ', this.eventKey);
     if (this.isActiveScreen) {
       this.reactToKeypress();
     } else {
