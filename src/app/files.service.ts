@@ -85,7 +85,7 @@ export class FilesService {
         if (!!data.parent) {
           res.unshift(new FileBuilder()
             .type('folder')
-            .name(data.parent)
+            .name('..')
             .path(data.parent)
             .build());
         }
