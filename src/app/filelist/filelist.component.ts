@@ -1,16 +1,19 @@
-import { Component, OnInit, DoCheck, Input } from '@angular/core';
+import { Component, OnInit, DoCheck, OnChanges, Input, AfterContentInit } from '@angular/core';
 import { File } from '../file';
-import { mockFile } from '../mock-files';
 import {TimeService} from '../time.service';
+import {FilesService} from '../files.service';
+import { ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'app-filelist',
   templateUrl: './filelist.component.html',
-  styleUrls: ['./filelist.component.scss', './themes/classic.scss', './themes/dark.scss']
+  styleUrls: ['./filelist.component.scss', './themes/classic.scss', './themes/dark.scss'],
+  providers: [FilesService]
 })
 export class FilelistComponent implements OnInit, DoCheck {
   files: File[];
   currentIndex: number;
+  res: any;
 
   currentFolder: File;
   selectedFile: File;
@@ -63,7 +66,13 @@ export class FilelistComponent implements OnInit, DoCheck {
   openFile(file: File) {
     this.currentFolder = file;
     this.selectedFile = undefined;
-    this.setFiles();
+    this.filesService.path = file.path;
+    this.filesService.stateLoaded = false;
+    this.filesService.UpdateFileState(file).then((data: any) => {
+      this.setFiles();
+      // this.currentFolder = this.filesService.fileState;
+      // this.files = this.currentFolder.children;
+    });
   }
 
   setCursor(index: number) {
@@ -84,13 +93,10 @@ export class FilelistComponent implements OnInit, DoCheck {
   }
 
   traverse(num: number) {
-    let newIndex = this.currentIndex + num;
+    const newIndex = this.currentIndex + num;
     // Reached 'top', bounce to bottom
-    if (newIndex < 0) {
-      newIndex = this.files.length - 1;
-    } else if (newIndex > this.files.length - 1) {
-      // Reached 'bottom', bounce to top
-      newIndex = 0;
+    if (newIndex < 0 || newIndex > this.files.length - 1) {
+      return;
     }
 
     this.currentIndex = newIndex;
@@ -120,22 +126,27 @@ export class FilelistComponent implements OnInit, DoCheck {
     }
   }
 
-  constructor(private timeService: TimeService) {
+  constructor(private timeService: TimeService, private filesService: FilesService, private ref: ChangeDetectorRef) {
     this.themeClass = 'classic';
   }
 
   ngOnInit() {
-    this.currentFolder = mockFile;
-    this.setCurrentTime(this);
-    this.calculateStats();
-    this.convertTimestamp();
-    this.setFiles();
-    if(this.isActiveScreen) {
-      this.setCursor(0);
-    }
+      this.filesService.UpdateFileState(null).then(() => {
+        this.currentFolder = this.filesService.fileState;
+        this.setCurrentTime(this);
+        this.calculateStats();
+        this.convertTimestamp();
+        this.setFiles();
+        if (this.isActiveScreen) {
+          this.setCursor(0);
+        }
+      });
   }
 
   ngDoCheck() {
+    console.log('triggered ngDoCheck');
+    this.currentFolder = this.filesService.fileState;
+    this.files = this.currentFolder.children;
     this.calculateStats();
     this.convertTimestamp();
     if (this.isActiveScreen) {

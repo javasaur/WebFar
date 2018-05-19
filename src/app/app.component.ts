@@ -14,17 +14,16 @@ export class AppComponent implements OnInit {
   @Output() rightScreenEventKey: string;
   @Output() leftScreenEventKey: string;
   @Output() isLeftScreenActive: boolean;
-  @Output() activeTheme: string;
+  activeTheme: string;
   themes: Array<string>;
   title = 'WebFar';
 
-  @HostListener('document:keyup', ['$event'])
+  @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     const key = event.key;
 
     if (key === 'q') {
       this.switchTheme();
-      console.log('q');
       return;
     }
 

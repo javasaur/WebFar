@@ -10,7 +10,7 @@ export class TimeService {
     return moment().format('HH:mm');
   }
   convertTimestamp(timestamp: number) {
-        return moment(timestamp).format('DD:MM:YYYY HH:mm:ss');
+    return moment(timestamp).format('DD:MM:YYYY HH:mm:ss');
   }
   constructor() {}
 }

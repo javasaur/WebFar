@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule} from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { FilelistComponent } from './filelist/filelist.component';
 
@@ -9,7 +10,8 @@ import { FilelistComponent } from './filelist/filelist.component';
     FilelistComponent,
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
