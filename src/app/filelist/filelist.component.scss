@@ -31,16 +31,20 @@
   flex: 1 1 50%;
 }
 
-.menuHeader .left {
+.left {
   text-align: left;
 }
 
-.menuHeader .right {
+.right {
   text-align: right;
 }
 
-.menuHeader {
+.menuHeader, .optionStats {
   display: flex;
+}
+
+.optionStats div.right, .optionStats div.left {
+  flex: 1 1 50%;
 }
 
 /* Content */
@@ -68,4 +72,8 @@
 
 .option:hover {
   cursor: pointer;
+}
+
+.sumStats {
+  text-align: center;
 }

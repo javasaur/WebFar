@@ -21,11 +21,20 @@
 </div>
 
 <div class="optionStats block" [ngClass]=themeClass>
-  <div *ngIf="selectedFile"><span class="info">{{ selectedFile.name }}</span>;
-    Type: <span class="info">{{ selectedFile.type }}</span>;
-    Size: <span class="info">{{ selectedFile.size }}b</span>
-    Last modified: <span class="info"> {{ selectedFileModifiedDate }}</span>
-  </div>
+  <ng-container *ngIf="selectedFile">
+    <div class="left">
+      <span class="info">{{ selectedFile.name }}</span>
+    </div>
+    <div class="right">
+      <ng-container *ngIf="selectedFile.isFile()">
+        Size: <span class="info">{{ selectedFile.size }}b</span>
+      </ng-container>
+      <ng-container *ngIf="selectedFile.isFolder()">
+        <span class="info">{{ selectedFile.type }}</span>
+      </ng-container>
+      Last modified: <span class="info"> {{ selectedFileModifiedDate }}</span>
+    </div>
+  </ng-container>
   <div *ngIf="!selectedFile" class="info">No file/folder selected</div>
 </div>
 
