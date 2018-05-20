@@ -10,6 +10,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+//
 
 // Get platform root
 app.get('/root', function (req, res) {

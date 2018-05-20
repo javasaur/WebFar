@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node index.js && exit 1",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specifiedd\" && exit 1"
   },
   "author": "Feo",
   "license": "ISC",
