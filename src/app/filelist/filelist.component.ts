@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, DoCheck, Input } from '@angular/core';
 import { File } from '../file';
 import {TimeService} from '../time.service';
 import {FilesService} from '../files.service';
@@ -10,35 +10,34 @@ import { ChangeDetectorRef} from '@angular/core';
   styleUrls: ['./filelist.component.scss', './themes/classic.scss', './themes/dark.scss'],
   providers: [FilesService]
 })
-export class FilelistComponent implements OnInit, DoCheck {
-  files: File[];
-  currentIndex: number;
-  res: any;
 
+export class FilelistComponent implements OnInit, DoCheck {
+  constructor(private timeService: TimeService, private filesService: FilesService, private ref: ChangeDetectorRef) {
+    this.themeClass = 'classic';
+    this.lastKeyPressTimestamp = 0;
+  }
+
+  // Current folder and it's content
   currentFolder: File;
+  files: File[]; // files list
+  currentIndex: number; // For up-down navigation
+
   selectedFile: File;
   selectedFileModifiedDate: string;
-  currentTime: string;
 
+  // Other
+  currentTime: string; // formatted timestamp
+  lastKeyPressTimestamp: number;
+
+  // summarized stats
   sumStatsFolders: number;
   sumStatsFiles: number;
   sumStatsSize: number;
+
+  // triggers from main screen
   @Input() themeClass: string;
   @Input() isActiveScreen: boolean;
   @Input() keyEvent: any;
-  lastKeyPressTimestamp: number;
-
-  setFiles() {
-    this.files = this.currentFolder.children;
-    this.currentIndex = 0;
-  }
-
-  setCurrentTime(obj): void {
-    obj.currentTime = obj.timeService.getCurrentTime();
-    setInterval(function() {
-      obj.currentTime = obj.timeService.getCurrentTime();
-    }, 60000);
-  }
 
   calculateStats(): void {
     this.sumStatsFiles = this.sumStatsFolders = this.sumStatsSize = 0;
@@ -59,14 +58,8 @@ export class FilelistComponent implements OnInit, DoCheck {
     }
   }
 
-  selectFile(file: File) {
-    this.selectedFile = file;
-    this.currentIndex = this.files.indexOf(file);
-  }
-
   openFile(file: File) {
     if (file.isFile()) {
-      console.log('opening: ', file.name);
       this.filesService.passControlToOS(file);
       return;
     }
@@ -77,28 +70,58 @@ export class FilelistComponent implements OnInit, DoCheck {
     this.filesService.stateLoaded = false;
     this.filesService.UpdateFileState(file).then((data: any) => {
       this.setFiles();
-      // this.currentFolder = this.filesService.fileState;
-      // this.files = this.currentFolder.children;
+      this.setCursor(0);
     });
+  }
+
+  reactToKeypress() {
+    const e = this.keyEvent;
+    if (!e) {
+      return;
+    }
+    if (e.timeStamp === this.lastKeyPressTimestamp) {
+      return;
+    }
+    switch (e.key) {
+      // Unset the position only if switched screen
+      case 'ArrowLeft':
+      case 'ArrowRight':
+        this.setCursor(0);
+        break;
+      case 'ArrowUp':
+        this.traverseUp();
+        break;
+      case 'ArrowDown':
+        this.traverseDown();
+        break;
+      case 'Enter':
+        this.openFile(this.selectedFile);
+        break;
+      default:
+        break;
+    }
+    this.lastKeyPressTimestamp = e.timeStamp;
+  }
+
+  selectFile(file: File) {
+    this.selectedFile = file;
+    this.currentIndex = this.files.indexOf(file);
+  }
+
+  setCurrentTime(obj): void {
+    obj.currentTime = obj.timeService.getCurrentTime();
+    setInterval(function() {
+      obj.currentTime = obj.timeService.getCurrentTime();
+    }, 60000);
   }
 
   setCursor(index: number) {
     this.selectedFile = this.files[index];
   }
 
-  unSelectFiles() {
-    this.selectedFile = null;
+  setFiles() {
+    this.files = this.currentFolder.children;
     this.currentIndex = 0;
-  }
-
-
-
-  traverseUp() {
-    this.traverse(-1);
-  }
-
-  traverseDown() {
-    this.traverse(1);
   }
 
   traverse(num: number) {
@@ -113,43 +136,20 @@ export class FilelistComponent implements OnInit, DoCheck {
     this.selectFile(this.files[newIndex]);
   }
 
-  reactToKeypress() {
-    const e = this.keyEvent;
-    if (!e) {
-      return;
-    }
-    if (e.timeStamp === this.lastKeyPressTimestamp) {
-      return;
-    }
-    console.log(e.key);
-    switch (e.key) {
-      // Unset the position only if switched screen
-      case 'ArrowLeft':
-      case 'ArrowRight':
-        this.setCursor(0);
-        break;
-      case 'ArrowUp':
-        this.traverseUp();
-        break;
-      case 'ArrowDown':
-        this.traverseDown();
-            break;
-      case 'Enter':
-        this.openFile(this.selectedFile);
-        break;
-      default:
-        break;
-    }
-    this.lastKeyPressTimestamp = e.timeStamp;
+  traverseDown() {
+    this.traverse(1);
   }
 
-  constructor(private timeService: TimeService, private filesService: FilesService, private ref: ChangeDetectorRef) {
-    this.themeClass = 'classic';
-    this.lastKeyPressTimestamp = 0;
+  traverseUp() {
+    this.traverse(-1);
+  }
+
+  unSelectFiles() {
+    this.selectedFile = null;
+    this.currentIndex = 0;
   }
 
   ngOnInit() {
-    // console.log('ngOnInit key: ', this.eventKey);
       this.filesService.UpdateFileState(null).then(() => {
         this.currentFolder = this.filesService.fileState;
         this.setCurrentTime(this);
@@ -163,12 +163,10 @@ export class FilelistComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    console.log('triggered ngDoCheck');
     this.currentFolder = this.filesService.fileState;
     this.files = this.currentFolder.children;
     this.calculateStats();
     this.convertTimestamp();
-    // console.log('inside ngDoCheck: ', this.eventKey);
     if (this.isActiveScreen) {
       this.reactToKeypress();
     } else {

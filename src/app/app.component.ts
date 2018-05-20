@@ -11,8 +11,7 @@ export class AppComponent implements OnInit {
   constructor() {
     this.themes = ['classic', 'dark'];
   }
-  // @Output() rightScreenEventKey: string;
-  // @Output() leftScreenEventKey: string;
+
   @Output() isLeftScreenActive: boolean;
   @Output() leftScreenEvent: any;
   @Output() rightScreenEvent: any;
@@ -20,10 +19,12 @@ export class AppComponent implements OnInit {
   themes: Array<string>;
   title = 'WebFar';
 
+  activateLeftScreen() {
+    this.isLeftScreenActive = true;
+  }
+
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    console.log(typeof event.timeStamp);
-    console.log('passing key: ', event.key);
     const key = event.key;
 
     if (key === 'q') {
@@ -33,7 +34,6 @@ export class AppComponent implements OnInit {
     if (key === 'ArrowLeft' || key === 'ArrowRight') {
       this.switchScreen();
     }
-    // this.isLeftScreenActive ? this.setEventToLeftScreen(key) : this.setEventToRightScreen(key);
     this.isLeftScreenActive ? this.passEventToLeftScreen(event) : this.passEventToRightScreen(event);
   }
 
@@ -45,29 +45,14 @@ export class AppComponent implements OnInit {
     this.rightScreenEvent = event;
   }
 
-  // setEventToLeftScreen(eventKey) {
-  //   console.log('passing to left screen: ', eventKey);
-  //   this.leftScreenEventKey = eventKey;
-  //   this.rightScreenEventKey = null;
-  // }
-
-  // setEventToRightScreen(eventKey) {
-  //   this.rightScreenEventKey = eventKey;
-  //   this.leftScreenEventKey = null;
-  // }
-
-  activateLeftScreen() {
-    this.isLeftScreenActive = true;
+  switchScreen() {
+    this.isLeftScreenActive = !this.isLeftScreenActive;
   }
 
   switchTheme() {
     const ind = this.themes.indexOf(this.activeTheme);
     const newInd = ind >= this.themes.length - 1 ? 0 : ind + 1;
     this.activeTheme = this.themes[newInd];
-  }
-
-  switchScreen() {
-    this.isLeftScreenActive = !this.isLeftScreenActive;
   }
 
   ngOnInit() {
