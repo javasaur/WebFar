@@ -21,6 +21,7 @@
 
 .filelist {
   flex: 1 1;
+  color: #FFF;
 }
 
 .optionStats, .sumStats {
@@ -43,8 +44,10 @@
   display: flex;
 }
 
-.optionStats div.right, .optionStats div.left {
-  flex: 1 1 50%;
+.optionStats {
+  div.right, div.left {
+    flex: 1 1 50%;
+  }
 }
 
 /* Content */
@@ -52,14 +55,16 @@
   font-weight: bold;
 }
 
-.filelist ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
+.filelist {
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 
-.filelist ul li {
-  padding: 5px;
+    li {
+      padding: 5px;
+    }
+  }
 }
 
 .filename {

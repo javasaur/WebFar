@@ -80,18 +80,19 @@ export class FilesService {
           if (!!extension) {
             subfolder.filename = subfolder.filename.slice(0, -extension.length - 1);
           }
-
           const f1 = new FileBuilder()
             .type(subfolder.type)
             .name(subfolder.filename)
             .extension(extension)
             .size(subfolder.stats.size)
-            .modifiedDate(subfolder.stats.mTime)
+            .modifiedDate(subfolder.stats.mtime)
             .path(subfolder.path)
             .hasParent(true)
             .build();
           res.push(f1);
         });
+
+
 
         f.children = res;
         this.fileState = f;
