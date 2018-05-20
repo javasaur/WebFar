@@ -164,13 +164,16 @@ export class FilelistComponent implements OnInit, DoCheck {
 
   ngDoCheck() {
     this.currentFolder = this.filesService.fileState;
-    this.files = this.currentFolder.children;
-    this.calculateStats();
-    this.convertTimestamp();
-    if (this.isActiveScreen) {
-      this.reactToKeypress();
-    } else {
-      this.unSelectFiles();
+    // Prevent calls if state is still not loaded
+    if (this.currentFolder !== undefined) {
+      this.files = this.currentFolder.children;
+      this.calculateStats();
+      this.convertTimestamp();
+      if (this.isActiveScreen) {
+        this.reactToKeypress();
+      } else {
+        this.unSelectFiles();
+      }
     }
   }
 }
