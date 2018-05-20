@@ -39,4 +39,4 @@ testem.log
 Thumbs.db
 
 # Submodules
-FileServiceProxy/node_modules
+fileserviceproxy/node_modules/
