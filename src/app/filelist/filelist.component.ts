@@ -84,15 +84,20 @@ export class FilelistComponent implements OnInit, DoCheck {
     }
     switch (e.key) {
       // Unset the position only if switched screen
-      case 'ArrowLeft':
-      case 'ArrowRight':
-        this.setCursor(0);
+      case 'Tab':
+        this.setCursorAtFirst();
         break;
       case 'ArrowUp':
         this.traverseUp();
         break;
       case 'ArrowDown':
         this.traverseDown();
+        break;
+      case 'ArrowLeft':
+        this.setCursorAtFirst();
+        break;
+      case 'ArrowRight':
+        this.setCursorAtLast();
         break;
       case 'Enter':
         this.openFile(this.selectedFile);
@@ -117,6 +122,15 @@ export class FilelistComponent implements OnInit, DoCheck {
 
   setCursor(index: number) {
     this.selectedFile = this.files[index];
+    this.currentIndex = index;
+  }
+
+  setCursorAtFirst() {
+    this.setCursor(0);
+  }
+
+  setCursorAtLast() {
+    this.setCursor(this.files.length - 1);
   }
 
   setFiles() {
@@ -165,7 +179,7 @@ export class FilelistComponent implements OnInit, DoCheck {
   ngDoCheck() {
     this.currentFolder = this.filesService.fileState;
     // Prevent calls if state is still not loaded
-    if (this.currentFolder !== undefined) {
+    if (this.filesService.stateLoaded) {
       this.files = this.currentFolder.children;
       this.calculateStats();
       this.convertTimestamp();

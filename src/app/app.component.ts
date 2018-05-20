@@ -25,13 +25,15 @@ export class AppComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
+    event.preventDefault();
+
     const key = event.key;
 
     if (key === 'q') {
       this.switchTheme();
     }
 
-    if (key === 'ArrowLeft' || key === 'ArrowRight') {
+    if (key === 'Tab') {
       this.switchScreen();
     }
     this.isLeftScreenActive ? this.passEventToLeftScreen(event) : this.passEventToRightScreen(event);
