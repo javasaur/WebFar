@@ -1,0 +1,19 @@
+{
+  "name": "fileserviceproxy",
+  "version": "1.0.0",
+  "description": "REST middleware between Angular App and users filesystem",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "node index.js && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Feo",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3"
+  }
+}
