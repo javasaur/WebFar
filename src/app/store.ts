@@ -11,8 +11,8 @@ export interface IAppState {
 }
 
 export const INITIAL_STATE: IAppState = {
-  activeTheme: 'dark',
-  availableThemes: ['classic', 'dark'],
+  activeTheme: 'classic',
+  availableThemes: ['classic', 'dark', 'clumsy'],
   screensAmount: 2,
   defaultScreen: 1,
   screens: [],

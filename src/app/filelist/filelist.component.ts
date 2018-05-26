@@ -8,7 +8,7 @@ import { IAppState } from '../store';
 @Component({
   selector: 'app-filelist',
   templateUrl: './filelist.component.html',
-  styleUrls: ['./filelist.component.scss', './themes/classic.scss', './themes/dark.scss'],
+  styleUrls: ['./filelist.component.scss', './themes/classic.scss', './themes/dark.scss', './themes/clumsy.scss'],
   providers: [FilesService]
 })
 

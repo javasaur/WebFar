@@ -1,26 +1,26 @@
-$MAIN_COLOR: #2e3030;
-$FONT: #FFF;
-$EFFECTS_BORDER: grey;
-$IMPORTANT: #ffa011;
+$MAIN_COLOR: #FF9E9D;
+$FONT: #000;
+$EFFECTS_BORDER: #FF3D7F;
+$IMPORTANT: #060370;
 
-.dark.block {
+.clumsy.block {
   background-color: $MAIN_COLOR;
   color: $FONT;
   border-color: $EFFECTS_BORDER;
 }
 
-.dark .info {
+.clumsy .info {
   color: $IMPORTANT;
 }
 
-.dark .selected {
+.clumsy .selected {
   background-color: $EFFECTS_BORDER;
 }
 
-.dark .option:hover {
+.clumsy .option:hover {
   background-color: $EFFECTS_BORDER;
 }
 
-.dark .extension {
+.clumsy .extension {
   color: $IMPORTANT;
 }

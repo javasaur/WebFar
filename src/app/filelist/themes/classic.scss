@@ -1,21 +1,27 @@
+$MAIN_COLOR: blue;
+$FONT: aliceblue;
+$EFFECTS_BORDER: cornflowerblue;
+$IMPORTANT: #ffb5bb;
+
+
 .classic.block {
-  background-color: blue;
-  color: aliceblue;
-  border-color: cornflowerblue;
+  background-color: $MAIN_COLOR;
+  color: $FONT;
+  border-color: $EFFECTS_BORDER;
 }
 
 .classic .info {
-  color: #ffb5bb;
+  color: $IMPORTANT;
 }
 
 .classic .selected {
-  background-color: cornflowerblue;
+  background-color: $EFFECTS_BORDER;
 }
 
 .classic .option:hover {
-  background-color: cornflowerblue;
+  background-color: $EFFECTS_BORDER;
 }
 
 .classic .extension {
-  color: aquamarine;
+  color: $IMPORTANT;
 }

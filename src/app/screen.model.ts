@@ -1,6 +1,7 @@
 export class Screen {
   private _isActive: boolean;
   private _event: any;
+  // private fileState: File | null;
 
   constructor() {
     this.isActive = false;
