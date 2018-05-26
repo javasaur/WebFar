@@ -1,11 +1,5 @@
-<app-filelist
-  [themeClass]="activeThemeClass"
-  [keyEvent] = "leftScreenEvent"
-  [isActiveScreen]="isLeftScreenActive">
+<app-filelist *ngFor="let screen of screens$"
+  [themeClass]="activeTheme$"
+  [keyEvent] = "screen.event"
+  [isActiveScreen]="screen.isActive">
 </app-filelist>
-<app-filelist
-  [themeClass]="activeThemeClass"
-  [keyEvent] = "rightScreenEvent"
-  [isActiveScreen]="!isLeftScreenActive">
-</app-filelist>
-

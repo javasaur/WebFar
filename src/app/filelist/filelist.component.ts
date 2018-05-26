@@ -1,7 +1,9 @@
 import { Component, OnInit, DoCheck, Input } from '@angular/core';
 import { File } from '../file';
-import {TimeService} from '../time.service';
-import {FilesService} from '../files.service';
+import { TimeService } from '../time.service';
+import { FilesService } from '../files.service';
+import { NgRedux } from '@angular-redux/store';
+import { IAppState } from '../store';
 
 @Component({
   selector: 'app-filelist',
@@ -15,28 +17,27 @@ export class FilelistComponent implements OnInit, DoCheck {
   currentFolder: File;
   files: File[]; // files list
   currentIndex: number; // For up-down navigation
-
   selectedFile: File;
   selectedFileModifiedDate: string;
 
   // Other
   currentTime: string; // formatted timestamp
-  lastKeyPressTimestamp: number;
+  lastKeyPressTimestamp = 0;
 
-  // summarized stats
+  // Summarized stats
   sumStatsFolders: number;
   sumStatsFiles: number;
   sumStatsSize: number;
 
-  // triggers from main screen
+  // From parent/main screen
   @Input() themeClass: string;
   @Input() isActiveScreen: boolean;
   @Input() keyEvent: any;
 
-  constructor(private timeService: TimeService, private filesService: FilesService) {
-    this.lastKeyPressTimestamp = 0;
+  constructor(private timeService: TimeService,
+              private filesService: FilesService,
+              private ngRedux: NgRedux<IAppState>) {
   }
-
 
   ngOnInit() {
     this.filesService.UpdateFileState(null).then(() => {
@@ -79,13 +80,13 @@ export class FilelistComponent implements OnInit, DoCheck {
     }
   }
 
-  convertTimestamp() {
+  convertTimestamp(): void {
     if (!!this.selectedFile) {
       this.selectedFileModifiedDate = this.timeService.convertTimestamp(this.selectedFile.modifiedDate);
     }
   }
 
-  openFile(file: File) {
+  openFile(file: File): void {
     if (file.isFile()) {
       this.filesService.passControlToOS(file);
       return;
@@ -101,7 +102,7 @@ export class FilelistComponent implements OnInit, DoCheck {
     });
   }
 
-  reactToKeypress() {
+  reactToKeypress(): void {
     const e = this.keyEvent;
     if (!e) {
       return;
@@ -134,7 +135,7 @@ export class FilelistComponent implements OnInit, DoCheck {
     this.lastKeyPressTimestamp = e.timeStamp;
   }
 
-  selectFile(file: File) {
+  selectFile(file: File): void {
     this.selectedFile = file;
     this.currentIndex = this.files.indexOf(file);
   }
@@ -146,25 +147,25 @@ export class FilelistComponent implements OnInit, DoCheck {
     }, 60000);
   }
 
-  setCursor(index: number) {
+  setCursor(index: number): void {
     this.selectedFile = this.files[index];
     this.currentIndex = index;
   }
 
-  setCursorAtFirst() {
+  setCursorAtFirst(): void {
     this.setCursor(0);
   }
 
-  setCursorAtLast() {
+  setCursorAtLast(): void {
     this.setCursor(this.files.length - 1);
   }
 
-  setFiles() {
+  setFiles(): void {
     this.files = this.currentFolder.children;
     this.currentIndex = 0;
   }
 
-  traverse(num: number) {
+  traverse(num: number): void {
     const newIndex = this.currentIndex + num;
     // Reached 'top', bounce to bottom
     if (newIndex < 0 || newIndex > this.files.length - 1) {
@@ -176,15 +177,15 @@ export class FilelistComponent implements OnInit, DoCheck {
     this.selectFile(this.files[newIndex]);
   }
 
-  traverseDown() {
+  traverseDown(): void {
     this.traverse(1);
   }
 
-  traverseUp() {
+  traverseUp(): void {
     this.traverse(-1);
   }
 
-  unSelectFiles() {
+  unSelectFiles(): void {
     this.selectedFile = null;
     this.currentIndex = 0;
   }
