@@ -1,4 +1,7 @@
 import { Component, OnInit, HostListener, Output } from '@angular/core';
+import { NgRedux, select } from '@angular-redux/store';
+import {IAppState} from './store';
+import { SWITCH_THEME } from './actions';
 
 @Component({
   selector: 'app-root',
@@ -8,16 +11,21 @@ import { Component, OnInit, HostListener, Output } from '@angular/core';
 
 
 export class AppComponent implements OnInit {
-  constructor() {
-    this.themes = ['classic', 'dark'];
-  }
-
   @Output() isLeftScreenActive: boolean;
   @Output() leftScreenEvent: any;
   @Output() rightScreenEvent: any;
-  activeTheme: string;
+  @select('activeTheme') activeTheme;
+  @Output() activeThemeClass: string;
   themes: Array<string>;
-  title = 'WebFar';
+
+  constructor(private ngRedux: NgRedux<IAppState>) {}
+
+  ngOnInit() {
+    this.activeTheme.subscribe((theme: string) => {
+      this.activeThemeClass = theme;
+    });
+    this.activateLeftScreen();
+  }
 
   activateLeftScreen() {
     this.isLeftScreenActive = true;
@@ -25,7 +33,6 @@ export class AppComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    event.preventDefault();
 
     const key = event.key;
 
@@ -52,13 +59,6 @@ export class AppComponent implements OnInit {
   }
 
   switchTheme() {
-    const ind = this.themes.indexOf(this.activeTheme);
-    const newInd = ind >= this.themes.length - 1 ? 0 : ind + 1;
-    this.activeTheme = this.themes[newInd];
-  }
-
-  ngOnInit() {
-    this.activeTheme = 'classic';
-    this.activateLeftScreen();
+    this.ngRedux.dispatch({type: SWITCH_THEME});
   }
 }

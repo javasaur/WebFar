@@ -12,6 +12,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-redux/store": "^7.1.1",
     "@angular/animations": "^6.0.0",
     "@angular/common": "^6.0.0",
     "@angular/compiler": "^6.0.0",
@@ -24,7 +25,9 @@
     "core-js": "^2.5.4",
     "cors": "^2.8.4",
     "moment": "^2.22.1",
+    "redux": "^3.7.2",
     "rxjs": "^6.0.0",
+    "rxjs-compat": "^6.2.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

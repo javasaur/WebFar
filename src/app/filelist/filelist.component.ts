@@ -12,11 +12,6 @@ import { ChangeDetectorRef} from '@angular/core';
 })
 
 export class FilelistComponent implements OnInit, DoCheck {
-  constructor(private timeService: TimeService, private filesService: FilesService, private ref: ChangeDetectorRef) {
-    this.themeClass = 'classic';
-    this.lastKeyPressTimestamp = 0;
-  }
-
   // Current folder and it's content
   currentFolder: File;
   files: File[]; // files list
@@ -38,6 +33,39 @@ export class FilelistComponent implements OnInit, DoCheck {
   @Input() themeClass: string;
   @Input() isActiveScreen: boolean;
   @Input() keyEvent: any;
+
+  constructor(private timeService: TimeService, private filesService: FilesService, private ref: ChangeDetectorRef) {
+    this.lastKeyPressTimestamp = 0;
+  }
+
+
+  ngOnInit() {
+    this.filesService.UpdateFileState(null).then(() => {
+      this.currentFolder = this.filesService.fileState;
+      this.setCurrentTime(this);
+      this.calculateStats();
+      this.convertTimestamp();
+      this.setFiles();
+      if (this.isActiveScreen) {
+        this.setCursor(0);
+      }
+    });
+  }
+
+  ngDoCheck() {
+    this.currentFolder = this.filesService.fileState;
+    // Prevent calls if state is still not loaded
+    if (this.filesService.stateLoaded) {
+      this.files = this.currentFolder.children;
+      this.calculateStats();
+      this.convertTimestamp();
+      if (this.isActiveScreen) {
+        this.reactToKeypress();
+      } else {
+        this.unSelectFiles();
+      }
+    }
+  }
 
   calculateStats(): void {
     this.sumStatsFiles = this.sumStatsFolders = this.sumStatsSize = 0;
@@ -83,7 +111,6 @@ export class FilelistComponent implements OnInit, DoCheck {
       return;
     }
     switch (e.key) {
-      // Unset the position only if switched screen
       case 'Tab':
         this.setCursorAtFirst();
         break;
@@ -161,33 +188,5 @@ export class FilelistComponent implements OnInit, DoCheck {
   unSelectFiles() {
     this.selectedFile = null;
     this.currentIndex = 0;
-  }
-
-  ngOnInit() {
-      this.filesService.UpdateFileState(null).then(() => {
-        this.currentFolder = this.filesService.fileState;
-        this.setCurrentTime(this);
-        this.calculateStats();
-        this.convertTimestamp();
-        this.setFiles();
-        if (this.isActiveScreen) {
-          this.setCursor(0);
-        }
-      });
-  }
-
-  ngDoCheck() {
-    this.currentFolder = this.filesService.fileState;
-    // Prevent calls if state is still not loaded
-    if (this.filesService.stateLoaded) {
-      this.files = this.currentFolder.children;
-      this.calculateStats();
-      this.convertTimestamp();
-      if (this.isActiveScreen) {
-        this.reactToKeypress();
-      } else {
-        this.unSelectFiles();
-      }
-    }
   }
 }
