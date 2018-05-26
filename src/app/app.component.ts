@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
   @Output() rightScreenEvent: any;
   @select('activeTheme') activeTheme;
   @Output() activeThemeClass: string;
-  themes: Array<string>;
 
   constructor(private ngRedux: NgRedux<IAppState>) {}
 

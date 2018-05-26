@@ -2,7 +2,6 @@ import { Component, OnInit, DoCheck, Input } from '@angular/core';
 import { File } from '../file';
 import {TimeService} from '../time.service';
 import {FilesService} from '../files.service';
-import { ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'app-filelist',
@@ -34,7 +33,7 @@ export class FilelistComponent implements OnInit, DoCheck {
   @Input() isActiveScreen: boolean;
   @Input() keyEvent: any;
 
-  constructor(private timeService: TimeService, private filesService: FilesService, private ref: ChangeDetectorRef) {
+  constructor(private timeService: TimeService, private filesService: FilesService) {
     this.lastKeyPressTimestamp = 0;
   }
 
