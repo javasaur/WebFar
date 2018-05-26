@@ -1,5 +1,5 @@
-import { File } from './file';
-import {AssertionError} from 'assert';
+import { File } from './file.model';
+import { AssertionError } from 'assert';
 
 export class FileBuilder {
   constructor() {

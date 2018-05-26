@@ -1,9 +1,10 @@
 import { Component, OnInit, DoCheck, Input } from '@angular/core';
-import { File } from '../file';
 import { TimeService } from '../time.service';
-import { FilesService } from '../files.service';
-import { NgRedux } from '@angular-redux/store';
-import { IAppState } from '../store';
+import { FilesService } from '../files/files.service';
+import { NgRedux, select } from '@angular-redux/store';
+import { IAppState } from '../store/store';
+import { Screen } from '../screen.model';
+import { File } from '../files/file.model';
 
 @Component({
   selector: 'app-filelist',
@@ -33,6 +34,9 @@ export class FilelistComponent implements OnInit, DoCheck {
   @Input() themeClass: string;
   @Input() isActiveScreen: boolean;
   @Input() keyEvent: any;
+  @Input() screenId: number;
+  @select() screens;
+  screens$: Screen[];
 
   constructor(private timeService: TimeService,
               private filesService: FilesService,
@@ -40,22 +44,29 @@ export class FilelistComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-    this.filesService.UpdateFileState(null).then(() => {
-      this.currentFolder = this.filesService.fileState;
-      this.setCurrentTime(this);
-      this.calculateStats();
-      this.convertTimestamp();
-      this.setFiles();
-      if (this.isActiveScreen) {
-        this.setCursor(0);
+    this.screens.subscribe((screens: Screen[]) => {
+      this.screens$ = screens;
+    });
+
+    this.filesService.UpdateFileState(null, this.screenId).then(() => {
+      this.currentFolder = this.screens$[this.screenId].fileState;
+
+      if (!!this.currentFolder) {
+        this.files = this.currentFolder.children;
+        this.setCurrentTime(this);
+        this.calculateStats();
+        this.convertTimestamp();
+        this.setFiles();
+        if (this.isActiveScreen) {
+          this.setCursorAtFirst();
+        }
       }
     });
+
   }
 
   ngDoCheck() {
-    this.currentFolder = this.filesService.fileState;
-    // Prevent calls if state is still not loaded
-    if (this.filesService.stateLoaded) {
+    if (this.currentFolder && this.filesService.stateLoaded) {
       this.files = this.currentFolder.children;
       this.calculateStats();
       this.convertTimestamp();
@@ -92,13 +103,13 @@ export class FilelistComponent implements OnInit, DoCheck {
       return;
     }
 
-    this.currentFolder = file;
-    this.selectedFile = undefined;
     this.filesService.path = file.path;
     this.filesService.stateLoaded = false;
-    this.filesService.UpdateFileState(file).then((data: any) => {
+    this.filesService.UpdateFileState(file, this.screenId).then((data: any) => {
+      this.selectedFile = undefined;
+      this.currentFolder = this.screens$[this.screenId].fileState;
       this.setFiles();
-      this.setCursor(0);
+      this.setCursorAtFirst();
     });
   }
 
@@ -167,7 +178,6 @@ export class FilelistComponent implements OnInit, DoCheck {
 
   traverse(num: number): void {
     const newIndex = this.currentIndex + num;
-    // Reached 'top', bounce to bottom
     if (newIndex < 0 || newIndex > this.files.length - 1) {
       return;
     }

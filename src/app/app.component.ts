@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, Output } from '@angular/core';
 import { NgRedux, select } from '@angular-redux/store';
-import { IAppState } from './store';
-import { CHANGE_ACTIVE_SCREEN, INITIALIZE_SCREENS, MOVE_TO_NEXT_SCREEN, SWITCH_THEME} from './actions';
+import { IAppState } from './store/store';
+import { CHANGE_ACTIVE_SCREEN, INITIALIZE_SCREENS, MOVE_TO_NEXT_SCREEN, SWITCH_THEME } from './store/actions';
 import { Screen } from './screen.model';
 
 @Component({
@@ -14,15 +14,14 @@ export class AppComponent implements OnInit {
   @select() activeTheme;
   @Output() activeTheme$: string;
   @select() screens;
-  screens$: Screen[];
   @select() activeScreen;
+  screens$: Screen[];
   activeScreen$: Screen;
 
   constructor(private ngRedux: NgRedux<IAppState>) {}
 
   ngOnInit() {
     this.setSubscriptionToState();
-
     const initialState = this.ngRedux.getState();
     this.ngRedux.dispatch({type: INITIALIZE_SCREENS});
     this.ngRedux.dispatch({type: CHANGE_ACTIVE_SCREEN, id: initialState.defaultScreen});

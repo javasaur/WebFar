@@ -1,8 +1,8 @@
 import { NgRedux, NgReduxModule } from '@angular-redux/store';
-import { IAppState, INITIAL_STATE, rootReducer } from './store';
+import { IAppState, INITIAL_STATE, rootReducer } from './store/store';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { FilelistComponent } from './filelist/filelist.component';
 

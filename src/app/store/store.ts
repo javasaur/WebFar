@@ -1,9 +1,9 @@
-import { CHANGE_ACTIVE_SCREEN, INITIALIZE_SCREENS, MOVE_TO_NEXT_SCREEN, SWITCH_THEME} from './actions';
-import { Screen } from './screen.model';
+import { CHANGE_ACTIVE_SCREEN, INITIALIZE_SCREENS, MOVE_TO_NEXT_SCREEN, SWITCH_THEME, UPDATE_FILE_STATE } from './actions';
+import { Screen } from '../screen.model';
 
 export interface IAppState {
   activeTheme: string;
-  availableThemes: Array<string>;
+  availableThemes: string[];
   screensAmount: number;
   defaultScreen: number; // not zero-based (1,2...)
   screens: Screen[];
@@ -13,14 +13,14 @@ export interface IAppState {
 export const INITIAL_STATE: IAppState = {
   activeTheme: 'classic',
   availableThemes: ['classic', 'dark', 'clumsy'],
-  screensAmount: 2,
+  screensAmount: 3,
   defaultScreen: 1,
   screens: [],
   activeScreen: null
 };
 
 export function rootReducer(state: IAppState, action): IAppState {
-  let ind, newInd, prev, curr, screens;
+  let ind, newInd, prev, curr, screen, screens;
 
   switch (action.type) {
     case CHANGE_ACTIVE_SCREEN:
@@ -41,7 +41,7 @@ export function rootReducer(state: IAppState, action): IAppState {
     case MOVE_TO_NEXT_SCREEN:
       screens = [...state.screens];
       ind = screens.indexOf(state.activeScreen);
-      newInd = screens.getNextIndexOrFirst(ind + 1);
+      newInd = getNextIndexOrFirst(screens, ind + 1);
       ({prev, curr} = definePrevAndCurrScreen(screens, {...state}, newInd));
       toggleActiveProp(prev, curr);
       return Object.assign({}, state, {
@@ -51,9 +51,17 @@ export function rootReducer(state: IAppState, action): IAppState {
 
     case SWITCH_THEME:
       ind = state.availableThemes.indexOf(state.activeTheme);
-      newInd = state.availableThemes.getNextIndexOrFirst(ind + 1);
+      newInd = getNextIndexOrFirst(state.availableThemes, ind + 1);
       return Object.assign({}, state, {
         activeTheme: state.availableThemes[newInd]
+      });
+
+    case UPDATE_FILE_STATE:
+      screens = {...state}.screens;
+      screen = screens[action.screenId];
+      screen.fileState = action.fileState;
+      return Object.assign({}, state, {
+        screens: screens
       });
   }
   return state;
@@ -75,4 +83,8 @@ function toggleActiveProp(prev: Screen, curr: Screen) {
     prev.isActive = false;
   }
   curr.isActive = true;
+}
+
+function getNextIndexOrFirst(arr, nextIndex) {
+  return nextIndex >= arr.length ? 0 : nextIndex;
 }

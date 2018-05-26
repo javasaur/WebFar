@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FileBuilder } from './filebuilder';
+import { NgRedux } from '@angular-redux/store';
+import { IAppState } from '../store/store';
+import { UPDATE_FILE_STATE } from '../store/actions';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +11,7 @@ import { FileBuilder } from './filebuilder';
 
 export class FilesService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private ngRedux: NgRedux<IAppState>) {
   }
 
   public fileState;
@@ -40,7 +43,7 @@ export class FilesService {
     return this.http.post('http://localhost:3000/file', body).toPromise();
   }
 
-  public async UpdateFileState(toFile) {
+  public async UpdateFileState(toFile, screenId) {
     const res = [];
     if (!this.stateLoaded) {
       let f, filePath, fileName;
@@ -112,8 +115,8 @@ export class FilesService {
       });
 
       await parent;
-
       this.stateLoaded = true;
+      this.ngRedux.dispatch({type: UPDATE_FILE_STATE, screenId: screenId, fileState: f});
       return f;
     }
   }

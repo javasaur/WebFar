@@ -1,10 +1,20 @@
+import { File } from './files/file.model';
+
 export class Screen {
   private _isActive: boolean;
   private _event: any;
-  // private fileState: File | null;
+  private _fileState: File | null;
 
   constructor() {
     this.isActive = false;
+  }
+
+  get fileState(): File | null {
+    return this._fileState;
+  }
+
+  set fileState(value: File | null) {
+    this._fileState = value;
   }
 
   get isActive(): boolean {

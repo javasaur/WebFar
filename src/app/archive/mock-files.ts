@@ -1,5 +1,5 @@
-import { File } from '../file';
-import { FileBuilder } from '../filebuilder';
+import { File } from '../files/file.model';
+import { FileBuilder } from '../files/filebuilder';
 
 const parent = new FileBuilder()
   .type('folder')
