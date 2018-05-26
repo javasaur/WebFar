@@ -12,8 +12,8 @@
     <li *ngFor="let file of files"
         class="content option"
         [class.selected]="file === selectedFile"
-        (click)="selectFile(file)"
-        (dblclick)="openFile(file)">
+        (click)="handleMouseEvent($event, file)"
+        (dblclick)="handleMouseEvent($event, file)">
       <span class="filename">{{ file.name }}</span>
       <span *ngIf="file.isFile()">.<span class="extension">{{ file.extension }}</span></span>
     </li>

@@ -5,6 +5,7 @@ import { NgRedux, select } from '@angular-redux/store';
 import { IAppState } from '../store/store';
 import { Screen } from '../screen.model';
 import { File } from '../files/file.model';
+import {MOVE_TO_NEXT_SCREEN, MOVE_TO_SCREEN} from '../store/actions';
 
 @Component({
   selector: 'app-filelist',
@@ -94,6 +95,20 @@ export class FilelistComponent implements OnInit, DoCheck {
   convertTimestamp(): void {
     if (!!this.selectedFile) {
       this.selectedFileModifiedDate = this.timeService.convertTimestamp(this.selectedFile.modifiedDate);
+    }
+  }
+
+  handleMouseEvent(event, file): void {
+    event.preventDefault();
+
+    if (!this.isActiveScreen) {
+      this.ngRedux.dispatch({type: MOVE_TO_SCREEN, screenId: this.screenId});
+    }
+
+    if (event.type === 'click') {
+      this.selectFile(file);
+    } else if(event.type === 'dblclick') {
+      this.openFile(file);
     }
   }
 

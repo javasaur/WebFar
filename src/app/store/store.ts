@@ -1,4 +1,11 @@
-import { CHANGE_ACTIVE_SCREEN, INITIALIZE_SCREENS, MOVE_TO_NEXT_SCREEN, SWITCH_THEME, UPDATE_FILE_STATE } from './actions';
+import {
+  CHANGE_ACTIVE_SCREEN,
+  INITIALIZE_SCREENS,
+  MOVE_TO_NEXT_SCREEN,
+  MOVE_TO_SCREEN,
+  SWITCH_THEME,
+  UPDATE_FILE_STATE
+} from './actions';
 import { Screen } from '../screen.model';
 
 export interface IAppState {
@@ -13,7 +20,7 @@ export interface IAppState {
 export const INITIAL_STATE: IAppState = {
   activeTheme: 'classic',
   availableThemes: ['classic', 'dark', 'clumsy'],
-  screensAmount: 3,
+  screensAmount: 2,
   defaultScreen: 1,
   screens: [],
   activeScreen: null
@@ -43,6 +50,15 @@ export function rootReducer(state: IAppState, action): IAppState {
       ind = screens.indexOf(state.activeScreen);
       newInd = getNextIndexOrFirst(screens, ind + 1);
       ({prev, curr} = definePrevAndCurrScreen(screens, {...state}, newInd));
+      toggleActiveProp(prev, curr);
+      return Object.assign({}, state, {
+        screens: screens,
+        activeScreen: curr
+      });
+
+    case MOVE_TO_SCREEN:
+      screens = [...state.screens];
+      ({prev, curr} = definePrevAndCurrScreen(screens, {...state}, action.screenId));
       toggleActiveProp(prev, curr);
       return Object.assign({}, state, {
         screens: screens,
