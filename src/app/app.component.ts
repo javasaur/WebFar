@@ -16,8 +16,8 @@ export class AppComponent implements OnInit {
   @select() activeTheme;
   @Output() activeTheme$: string;
   @select() screens;
-  @select() activeScreen;
   screens$: Screen[];
+  @select() activeScreen;
   activeScreen$: Screen;
 
   constructor(private store: NgRedux<IAppState>,
@@ -36,10 +36,11 @@ export class AppComponent implements OnInit {
     const key = event.key;
     if (key === 'q') {
       this.themeActions.switchTheme();
+      return;
     }
 
     if (key === 'Tab') {
-      this.screenActions.moveToNextScreen()
+      this.screenActions.moveToNextScreen();
     }
 
     this.passEventToActiveScreen(event);
