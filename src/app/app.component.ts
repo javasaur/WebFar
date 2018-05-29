@@ -1,8 +1,10 @@
 import { Component, OnInit, HostListener, Output } from '@angular/core';
+import { ThemeActions } from './store/theme.actions';
 import { NgRedux, select } from '@angular-redux/store';
-import { IAppState } from './store/store';
-import { CHANGE_ACTIVE_SCREEN, INITIALIZE_SCREENS, MOVE_TO_NEXT_SCREEN, SWITCH_THEME } from './store/actions';
 import { Screen } from './screen.model';
+import { IAppState } from './store/IAppState';
+import { ScreenActions } from './store/screen.actions';
+
 
 @Component({
   selector: 'app-root',
@@ -18,13 +20,13 @@ export class AppComponent implements OnInit {
   screens$: Screen[];
   activeScreen$: Screen;
 
-  constructor(private ngRedux: NgRedux<IAppState>) {}
+  constructor(private store: NgRedux<IAppState>,
+              private themeActions: ThemeActions,
+              private screenActions: ScreenActions) {}
 
   ngOnInit() {
     this.setSubscriptionToState();
-    const initialState = this.ngRedux.getState();
-    this.ngRedux.dispatch({type: INITIALIZE_SCREENS});
-    this.ngRedux.dispatch({type: CHANGE_ACTIVE_SCREEN, id: initialState.defaultScreen});
+    this.screenActions.setupScreens();
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -33,22 +35,22 @@ export class AppComponent implements OnInit {
 
     const key = event.key;
     if (key === 'q') {
-      this.switchTheme();
+      this.themeActions.switchTheme();
     }
 
     if (key === 'Tab') {
-      this.moveToNextScreen();
+      this.screenActions.moveToNextScreen()
     }
 
     this.passEventToActiveScreen(event);
   }
 
-  passEventToActiveScreen(event) {
-    this.activeScreen$.event = event;
+  moveToScreen(screenId) {
+    this.screenActions.moveToScreen(screenId);
   }
 
-  moveToNextScreen() {
-    this.ngRedux.dispatch({type : MOVE_TO_NEXT_SCREEN});
+  passEventToActiveScreen(event) {
+    this.activeScreen$.event = event;
   }
 
   setSubscriptionToState() {
@@ -61,9 +63,5 @@ export class AppComponent implements OnInit {
     this.activeScreen.subscribe((screen: Screen) => {
       this.activeScreen$ = screen;
     });
-  }
-
-  switchTheme() {
-    this.ngRedux.dispatch({type: SWITCH_THEME});
   }
 }

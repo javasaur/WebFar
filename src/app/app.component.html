@@ -2,5 +2,6 @@
   [themeClass]="activeTheme$"
   [keyEvent] = "screen.event"
   [isActiveScreen]="screen.isActive"
-  [screenId]="i">
+  [screenId]="i"
+  (moveToScreen)="moveToScreen($event)">
 </app-filelist>

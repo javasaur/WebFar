@@ -1,11 +1,11 @@
-import { Component, OnInit, DoCheck, Input } from '@angular/core';
+import {Component, OnInit, DoCheck, Input, EventEmitter, Output} from '@angular/core';
 import { TimeService } from '../time.service';
 import { FilesService } from '../files/files.service';
 import { NgRedux, select } from '@angular-redux/store';
-import { IAppState } from '../store/store';
 import { Screen } from '../screen.model';
 import { File } from '../files/file.model';
-import {MOVE_TO_NEXT_SCREEN, MOVE_TO_SCREEN} from '../store/actions';
+import { MOVE_TO_SCREEN } from '../store/actions';
+import { IAppState } from '../store/IAppState';
 
 @Component({
   selector: 'app-filelist',
@@ -25,6 +25,7 @@ export class FilelistComponent implements OnInit, DoCheck {
   // Other
   currentTime: string; // formatted timestamp
   lastKeyPressTimestamp = 0;
+  @Output() moveToScreen = new EventEmitter<number>();
 
   // Summarized stats
   sumStatsFolders: number;
@@ -102,12 +103,13 @@ export class FilelistComponent implements OnInit, DoCheck {
     event.preventDefault();
 
     if (!this.isActiveScreen) {
-      this.ngRedux.dispatch({type: MOVE_TO_SCREEN, screenId: this.screenId});
+      this.moveToScreen.emit(this.screenId);
+      // this.ngRedux.dispatch({type: MOVE_TO_SCREEN, screenId: this.screenId});
     }
 
     if (event.type === 'click') {
       this.selectFile(file);
-    } else if(event.type === 'dblclick') {
+    } else if (event.type === 'dblclick') {
       this.openFile(file);
     }
   }
