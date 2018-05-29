@@ -3,7 +3,7 @@ import { NgRedux } from '@angular-redux/store';
 import { IAppState } from './IAppState';
 import {Screen} from '../screen.model';
 import {
-  changeActiveScreenACtion,
+  changeActiveScreenAction,
   initializeScreensAction,
   moveToNextScreenAction,
   moveToScreenAction} from './action.creators';
@@ -26,7 +26,7 @@ export class ScreenActions {
 
     ({prev, curr} = definePrevAndCurrScreen(screens, state, screenId - 1));
     toggleActiveProp(prev, curr);
-    this.store.dispatch(changeActiveScreenACtion(screens, curr));
+    this.store.dispatch(changeActiveScreenAction(screens, curr));
   }
 
   initializeScreens() {
@@ -49,7 +49,6 @@ export class ScreenActions {
     let prev, curr;
     const state = {...this.store.getState()};
     const screens = [...state.screens];
-    const ind = screens.indexOf(state.activeScreen);
     ({prev, curr} = definePrevAndCurrScreen(screens, state, screenId));
     toggleActiveProp(prev, curr);
     this.store.dispatch(moveToScreenAction(screens, curr));

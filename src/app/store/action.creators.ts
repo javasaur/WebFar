@@ -13,7 +13,7 @@ export function switchThemeAction(newTheme) {
   };
 }
 
-export function changeActiveScreenACtion(screens, activeScreen) {
+export function changeActiveScreenAction(screens, activeScreen) {
   return {
     type: CHANGE_ACTIVE_SCREEN,
     screens,

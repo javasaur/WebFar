@@ -18,8 +18,6 @@ export const INITIAL_STATE: IAppState = {
 };
 
 export function rootReducer(state: IAppState, action): IAppState {
-  let screen, screens;
-
   switch (action.type) {
     case CHANGE_ACTIVE_SCREEN:
       return Object.assign({}, state, {
