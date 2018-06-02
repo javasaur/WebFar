@@ -24,3 +24,16 @@ $IMPORTANT: #060370;
 .clumsy .extension {
   color: $IMPORTANT;
 }
+
+.clumsy.error-wrapper {
+  background-color: $MAIN_COLOR;
+}
+
+.clumsy .error {
+  border-color: $EFFECTS_BORDER;
+  color: $FONT;
+}
+
+.clumsy .uri {
+  color: $IMPORTANT;
+}

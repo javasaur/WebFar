@@ -8,8 +8,5 @@ export class TimeService {
   getCurrentTime() {
     return moment().format('HH:mm');
   }
-  convertTimestamp(timestamp: number) {
-    return moment(timestamp).format('DD:MM:YYYY HH:mm:ss');
-  }
   constructor() {}
 }

@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
-import { IAppState } from './IAppState';
-import {Screen} from '../screen.model';
+
+import { IAppState } from '../state/IAppState';
+import { Screen } from '../../fs/screen.model';
 import {
   changeActiveScreenAction,
   initializeScreensAction,
   moveToNextScreenAction,
   moveToScreenAction} from './action.creators';
-import {getNextIndexOrFirst} from '../utils/CustomFunctions';
+import { getNextIndexOrFirst } from '../../utils/CustomFunctions';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ScreenActions {
   constructor(private store: NgRedux<IAppState>) {}
 
@@ -29,6 +31,12 @@ export class ScreenActions {
     this.store.dispatch(changeActiveScreenAction(screens, curr));
   }
 
+  initializeScreen(screenId) {
+    const screens = [...this.store.getState().screens];
+    screens[screenId].isInitialised = true;
+    this.store.dispatch(initializeScreensAction(screens));
+  }
+
   initializeScreens() {
     const screens = Array.from({length: this.store.getState().screensAmount}, () => (new Screen()));
     this.store.dispatch(initializeScreensAction(screens));
@@ -41,6 +49,7 @@ export class ScreenActions {
     const ind = screens.indexOf(state.activeScreen);
     const newInd = getNextIndexOrFirst(screens, ind + 1);
     ({prev, curr} = definePrevAndCurrScreen(screens, state, newInd));
+    curr.isDeactivated = false;
     toggleActiveProp(prev, curr);
     this.store.dispatch(moveToNextScreenAction(screens, curr));
   }
@@ -50,6 +59,7 @@ export class ScreenActions {
     const state = {...this.store.getState()};
     const screens = [...state.screens];
     ({prev, curr} = definePrevAndCurrScreen(screens, state, screenId));
+    curr.isDeactivated = false;
     toggleActiveProp(prev, curr);
     this.store.dispatch(moveToScreenAction(screens, curr));
   }

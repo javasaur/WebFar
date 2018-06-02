@@ -1,0 +1,26 @@
+:host {
+  width: 100%;
+}
+
+.error-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  flex: 0.5 0.5;
+  border-width: 3px;
+  border-style: solid;
+  padding: 20px;
+}
+
+.error .uri {
+  font-weight: bold;
+}
+
+.error a {
+  text-decoration: none;
+}

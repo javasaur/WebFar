@@ -1,9 +1,10 @@
-import { Component, OnInit, HostListener, Output } from '@angular/core';
-import { ThemeActions } from './store/theme.actions';
-import { NgRedux, select } from '@angular-redux/store';
-import { Screen } from './screen.model';
-import { IAppState } from './store/IAppState';
-import { ScreenActions } from './store/screen.actions';
+import { Component, OnInit } from '@angular/core';
+import { Event, Router, RoutesRecognized } from '@angular/router';
+import { select } from '@angular-redux/store';
+
+import {FilesActions} from './store/behavior/files.actions';
+
+
 
 
 @Component({
@@ -13,56 +14,25 @@ import { ScreenActions } from './store/screen.actions';
 })
 
 export class AppComponent implements OnInit {
-  @select() activeTheme;
-  @Output() activeTheme$: string;
-  @select() screens;
-  screens$: Screen[];
-  @select() activeScreen;
-  activeScreen$: Screen;
+  @select() pathError;
+  pathError$: string;
 
-  constructor(private store: NgRedux<IAppState>,
-              private themeActions: ThemeActions,
-              private screenActions: ScreenActions) {}
+  constructor(private _router: Router,
+              private filesActions: FilesActions){
+  }
 
   ngOnInit() {
-    this.setSubscriptionToState();
-    this.screenActions.setupScreens();
-  }
-
-  @HostListener('document:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    event.preventDefault();
-
-    const key = event.key;
-    if (key === 'q') {
-      this.themeActions.switchTheme();
-      return;
-    }
-
-    if (key === 'Tab') {
-      this.screenActions.moveToNextScreen();
-    }
-
-    this.passEventToActiveScreen(event);
-  }
-
-  moveToScreen(screenId) {
-    this.screenActions.moveToScreen(screenId);
-  }
-
-  passEventToActiveScreen(event) {
-    this.activeScreen$.event = event;
-  }
-
-  setSubscriptionToState() {
-    this.screens.subscribe((screens: Screen[]) => {
-      this.screens$ = screens;
+    this.pathError.subscribe((error) => {
+      this.pathError$ = error;
     });
-    this.activeTheme.subscribe((theme: string) => {
-      this.activeTheme$ = theme;
-    });
-    this.activeScreen.subscribe((screen: Screen) => {
-      this.activeScreen$ = screen;
+
+    this._router.events.subscribe((event: Event) => {
+      if (!!event && event instanceof RoutesRecognized) {
+        const path = event.state.root.firstChild.queryParams.path;
+        if(!this.pathError$) {
+          this.filesActions.changeCurrentPath(path);
+        }
+      }
     });
   }
 }

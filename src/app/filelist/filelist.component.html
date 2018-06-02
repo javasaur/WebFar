@@ -1,4 +1,4 @@
- <div class="menuHeader block" [ngClass]=themeClass>
+<div class="menuHeader block" [ngClass]=themeClass>
     <div class="left">
       <span class="content">Current folder: <span class="info">{{ currentFolder?.path }}</span></span>
     </div>
@@ -32,7 +32,7 @@
         <ng-container *ngIf="selectedFile.isFolder()">
           <span class="info">{{ selectedFile.type }}</span>
         </ng-container>
-        Last modified: <span class="info"> {{ selectedFileModifiedDate }}</span>
+        Last modified: <span class="info"> {{ selectedFile.modifiedDate | date:'short' }}</span>
       </div>
     </ng-container>
     <div *ngIf="!selectedFile" class="info">No file/folder selected</div>

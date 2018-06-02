@@ -25,3 +25,16 @@ $IMPORTANT: #ffb5bb;
 .classic .extension {
   color: $IMPORTANT;
 }
+
+.classic.error-wrapper {
+  background-color: $MAIN_COLOR;
+}
+
+.classic .error {
+  border-color: $EFFECTS_BORDER;
+  color: $FONT;
+}
+
+.classic .uri {
+  color: $IMPORTANT;
+}

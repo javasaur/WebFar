@@ -1,0 +1,7 @@
+<app-filelist *ngFor="let screen of screens$; let i = index"
+[themeClass]="activeTheme$"
+[keyEvent] = "screen.event"
+[isActiveScreen]="screen.isActive"
+[screenId]="i"
+(moveToThisScreen)="moveToScreen($event)">
+</app-filelist>

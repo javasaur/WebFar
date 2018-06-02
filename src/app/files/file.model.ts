@@ -17,7 +17,7 @@ export class File {
   private _children: File[];
   private _modifiedDate: number;
   private _path: string;
-  private _hasParent: boolean
+  private _hasParent: boolean;
 
   public isFolder(): boolean {
     return this.type === 'folder';
@@ -25,14 +25,6 @@ export class File {
 
   public isFile(): boolean {
     return this._type === 'file';
-  }
-
-  get hasParent(): boolean {
-    return this._hasParent;
-  }
-
-  set hasParent(value: boolean) {
-    this._hasParent = value;
   }
 
   get path(): string {
@@ -85,9 +77,5 @@ export class File {
 
   get modifiedDate(): number {
     return this._modifiedDate;
-  }
-
-  set modifiedDate(value: number) {
-    this._modifiedDate = value;
   }
 }

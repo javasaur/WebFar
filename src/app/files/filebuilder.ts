@@ -1,5 +1,7 @@
-import { File } from './file.model';
 import { AssertionError } from 'assert';
+
+import { File } from './file.model';
+
 
 export class FileBuilder {
   constructor() {
@@ -40,11 +42,6 @@ export class FileBuilder {
       this._modifiedDate,
       this._path,
       this._hasParent);
-  }
-
-  public children(c: File[]) {
-    this._children = c;
-    return this;
   }
 
   public extension(e: string) {

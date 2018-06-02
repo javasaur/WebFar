@@ -24,3 +24,16 @@ $IMPORTANT: #ffa011;
 .dark .extension {
   color: $IMPORTANT;
 }
+
+.dark.error-wrapper {
+  background-color: $MAIN_COLOR;
+}
+
+.dark .error {
+  border-color: $EFFECTS_BORDER;
+  color: $FONT;
+}
+
+.dark .uri {
+  color: $IMPORTANT;
+}

@@ -1,25 +1,29 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FileBuilder } from './filebuilder';
 import { NgRedux } from '@angular-redux/store';
-import { UPDATE_FILE_STATE } from '../store/actions';
-import { IAppState } from '../store/IAppState';
-import {FilesActions} from '../store/files.actions';
+
+import { IAppState } from '../store/state/IAppState';
+import { FilesActions } from '../store/behavior/files.actions';
+import { ScreenActions } from '../store/behavior/screen.actions';
+import { FileBuilder } from './filebuilder';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class FilesService {
+  private path: string;
+  private _calls = 0;
 
-  constructor(private http: HttpClient,
-              private ngRedux: NgRedux<IAppState>,
-              private filesActions: FilesActions) {
+  get calls(): number {
+    return this._calls;
   }
 
-  public fileState;
-  public path;
-  public stateLoaded = false;
+  constructor(private http: HttpClient,
+              private store: NgRedux<IAppState>,
+              private filesActions: FilesActions,
+              private screenActions: ScreenActions) {
+  }
 
   public getContentOfDir(dir) {
     const body = {
@@ -39,6 +43,10 @@ export class FilesService {
     return this.http.get('http://localhost:3000/root').toPromise();
   }
 
+  async initializeFileState(screenId: number, screen) {
+    return this.updateFileState('root', screenId, screen);
+  }
+
   public async passControlToOS(file) {
     const body = {
       path: file.path
@@ -46,82 +54,110 @@ export class FilesService {
     return this.http.post('http://localhost:3000/file', body).toPromise();
   }
 
-  public async UpdateFileState(toFile, screenId) {
-    const res = [];
-    if (!this.stateLoaded) {
-      let f, filePath, fileName;
+  public async updateFileState(toFile, screenId, screen) {
+    // Don't start load if got path error
+    if(this.store.getState().pathError) {
+      return;
+    }
+
+    if(!!this.path) {
+      this.path = (typeof toFile === 'object') ? toFile.path : toFile;
+      // this.path = this.path.replace(/\*/g, '/');
+    }
+
+    try {
+      const res = [];
+      let file, filePath, fileName;
 
       // Initial load, get the root
-      if (!this.path) {
-        const file = this.getRoot().then((rootObj: any) => {
-          fileName = filePath = this.path = rootObj.root;
-          f = new FileBuilder()
-            .type('folder')
-            .name(fileName)
-            .path(filePath)
-            .hasParent(false)
-            .build();
-          return f;
-        });
+      if (toFile === 'root') {
+        const fetchRoot = this.getRoot()
+          .then((rootObj: any) => {
+            fileName = filePath = this.path = rootObj.root;
+            file = new FileBuilder()
+              .type('folder')
+              .name(fileName)
+              .path(filePath)
+              .hasParent(false)
+              .build();
+            return file;
+          });
 
-        await file;
+        await fetchRoot;
       }
 
       // Expansion/folding of folder
-      if (toFile) {
-        f = toFile;
+      if (toFile !== 'root') {
+        if(typeof toFile === 'object') {
+          file = toFile;
+        } else {
+          file = new FileBuilder()
+            .type('folder')
+            .name(toFile)
+            .path(toFile)
+            .build();
+        }
       }
 
       // Get contents of the folder and push it to an array
-      const content = this.getContentOfDir(this.path).then((subfolders: Array<any>) => {
-        subfolders.forEach(subfolder => {
-          let extension;
-          const split = subfolder.filename.split('.');
-          if (split.length > 1) {
-            extension = split[split.length - 1];
-          } else {
-            extension = '';
-          }
-          // If extension is present, cut it from the filename
-          if (!!extension) {
-            subfolder.filename = subfolder.filename.slice(0, -extension.length - 1);
-          }
-          const f1 = new FileBuilder()
-            .type(subfolder.type)
-            .name(subfolder.filename)
-            .extension(extension)
-            .size(subfolder.stats.size)
-            .modifiedDate(subfolder.stats.mtime)
-            .path(subfolder.path)
-            .hasParent(true)
-            .build();
-          res.push(f1);
+      const fetchContent = this.getContentOfDir(file.path)
+        .then((subfolders: Array<any>) => {
+          subfolders.forEach(subfolder => {
+            // Parse extension
+            let extension;
+            const split = subfolder.filename.split('.');
+            if (split.length > 1) {
+              extension = split[split.length - 1];
+            } else {
+              extension = '';
+            }
+
+            // If extension is present, cut it from the filename
+            if (!!extension) {
+              subfolder.filename = subfolder.filename.slice(0, -extension.length - 1);
+            }
+
+            // Add the created file to result
+            res.push(
+              new FileBuilder()
+                .type(subfolder.type)
+                .name(subfolder.filename)
+                .extension(extension)
+                .size(subfolder.stats.size)
+                .modifiedDate(subfolder.stats.mtime)
+                .path(subfolder.path)
+                .hasParent(true)
+                .build()
+            );
+          });
+
+          file.children = res;
         });
 
-
-
-        f.children = res;
-        this.fileState = f;
-      });
-
-      await content;
+      await fetchContent;
 
       // If the target folder has a parent, add it as a first element to the array
-      const parent = this.getParentOfDir(f.path).then((data: any) => {
-        if (!!data.parent) {
-          res.unshift(new FileBuilder()
-            .type('folder')
-            .name('..')
-            .path(data.parent)
-            .build());
-        }
-      });
+      const fetchParent = this.getParentOfDir(file.path)
+        .then((data: any) => {
+          if (!!data.parent) {
+            res.unshift(new FileBuilder()
+              .type('folder')
+              .name('..')
+              .path(data.parent)
+              .build());
+          }
+        });
 
-      await parent;
-      this.stateLoaded = true;
-      this.filesActions.updateFileState(screenId, f);
-      // this.ngRedux.dispatch({type: UPDATE_FILE_STATE, screenId: screenId, fileState: f});
-      return f;
+      await fetchParent;
+
+      if(!screen.isInitialised) {
+        this.screenActions.initializeScreen(screenId);
+      }
+      this.filesActions.updateFileState(screenId, file);
+    } catch(err) {
+      this.filesActions.togglePathError();
     }
+
+
   }
 }

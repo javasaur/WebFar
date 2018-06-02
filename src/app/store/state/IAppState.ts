@@ -1,4 +1,4 @@
-import {Screen} from '../screen.model';
+import { Screen } from '../../fs/screen.model';
 
 export interface IAppState {
   activeTheme: string;
@@ -7,4 +7,6 @@ export interface IAppState {
   defaultScreen: number; // not zero-based (1,2...)
   screens: Screen[];
   activeScreen: Screen | null;
+  currentPath: string | null;
+  pathError: boolean;
 }

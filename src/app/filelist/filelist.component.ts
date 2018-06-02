@@ -1,116 +1,100 @@
-import {Component, OnInit, DoCheck, Input, EventEmitter, Output} from '@angular/core';
+import { Component, OnInit, DoCheck, Input, EventEmitter, Output } from '@angular/core';
+import { select } from '@angular-redux/store';
+import { Router } from '@angular/router';
+
 import { TimeService } from '../time.service';
 import { FilesService } from '../files/files.service';
-import { NgRedux, select } from '@angular-redux/store';
-import { Screen } from '../screen.model';
+import { Screen } from '../fs/screen.model';
 import { File } from '../files/file.model';
-import { MOVE_TO_SCREEN } from '../store/actions';
-import { IAppState } from '../store/IAppState';
+import { FilesActions } from '../store/behavior/files.actions';
 
 @Component({
   selector: 'app-filelist',
   templateUrl: './filelist.component.html',
-  styleUrls: ['./filelist.component.scss', './themes/classic.scss', './themes/dark.scss', './themes/clumsy.scss'],
+  styleUrls: ['./filelist.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss'],
   providers: [FilesService]
 })
 
 export class FilelistComponent implements OnInit, DoCheck {
-  // Current folder and it's content
+  // Current filelist and it's content
   currentFolder: File;
-  files: File[]; // files list
+  files: File[];
   currentIndex: number; // For up-down navigation
   selectedFile: File;
-  selectedFileModifiedDate: string;
+  currentTime: string;
+  lastKeyPressTimestamp = 0; // For correct key-events handling
 
-  // Other
-  currentTime: string; // formatted timestamp
-  lastKeyPressTimestamp = 0;
-  @Output() moveToScreen = new EventEmitter<number>();
-
-  // Summarized stats
+  // Stats for summary block
   sumStatsFolders: number;
   sumStatsFiles: number;
   sumStatsSize: number;
 
-  // From parent/main screen
+  // Settings from parent/state
   @Input() themeClass: string;
   @Input() isActiveScreen: boolean;
   @Input() keyEvent: any;
   @Input() screenId: number;
   @select() screens;
-  screens$: Screen[];
+
+
+  // Current screen abstraction and related event
+  screen: Screen;
+  @Output() moveToThisScreen = new EventEmitter<number>();
+  @select() currentPath;
 
   constructor(private timeService: TimeService,
               private filesService: FilesService,
-              private ngRedux: NgRedux<IAppState>) {
+              private filesActions: FilesActions,
+              private _router: Router) {
   }
 
   ngOnInit() {
-    this.screens.subscribe((screens: Screen[]) => {
-      this.screens$ = screens;
-    });
-
-    this.filesService.UpdateFileState(null, this.screenId).then(() => {
-      this.currentFolder = this.screens$[this.screenId].fileState;
-
-      if (!!this.currentFolder) {
-        this.files = this.currentFolder.children;
-        this.setCurrentTime(this);
-        this.calculateStats();
-        this.convertTimestamp();
-        this.setFiles();
-        if (this.isActiveScreen) {
-          this.setCursorAtFirst();
-        }
-      }
-    });
-
+    this.subscribeToStore();
   }
 
   ngDoCheck() {
-    if (this.currentFolder && this.filesService.stateLoaded) {
-      this.files = this.currentFolder.children;
-      this.calculateStats();
-      this.convertTimestamp();
-      if (this.isActiveScreen) {
-        this.reactToKeypress();
-      } else {
-        this.unSelectFiles();
-      }
+    // Must check because fileState might not be initialized yet
+    if (!this.currentFolder) {
+      return;
+    }
+    this.calculateSummaryStats();
+    if (this.isActiveScreen) {
+      this.reactToKeypress();
+      return;
+    }
+
+    // Avoid useless operations on nonactive screen
+    if (!this.screen.isDeactivated) {
+      this.unSelectActiveFile();
+      this.zeroCurrIndex();
+      this.screen.isDeactivated = true;
     }
   }
 
-  calculateStats(): void {
+  calculateSummaryStats(): void {
     this.sumStatsFiles = this.sumStatsFolders = this.sumStatsSize = 0;
-    for (let i = 0; i < this.currentFolder.children.length; i++) {
-      const f = this.currentFolder.children[i];
-      if (f.type === 'folder') {
-        this.sumStatsFolders++;
-      } else {
-        this.sumStatsFiles++;
-      }
+    const arr = this.currentFolder.children;
+    arr.forEach((f) => {
+      f.type === 'folder' ? this.sumStatsFolders++ : this.sumStatsFiles++;
       this.sumStatsSize += f.size;
-    }
-  }
-
-  convertTimestamp(): void {
-    if (!!this.selectedFile) {
-      this.selectedFileModifiedDate = this.timeService.convertTimestamp(this.selectedFile.modifiedDate);
-    }
+    });
   }
 
   handleMouseEvent(event, file): void {
     event.preventDefault();
 
     if (!this.isActiveScreen) {
-      this.moveToScreen.emit(this.screenId);
-      // this.ngRedux.dispatch({type: MOVE_TO_SCREEN, screenId: this.screenId});
+      this.moveToThisScreen.emit(this.screenId);
     }
 
     if (event.type === 'click') {
       this.selectFile(file);
-    } else if (event.type === 'dblclick') {
+      return;
+    }
+
+    if (event.type === 'dblclick') {
       this.openFile(file);
+      return;
     }
   }
 
@@ -120,14 +104,7 @@ export class FilelistComponent implements OnInit, DoCheck {
       return;
     }
 
-    this.filesService.path = file.path;
-    this.filesService.stateLoaded = false;
-    this.filesService.UpdateFileState(file, this.screenId).then((data: any) => {
-      this.selectedFile = undefined;
-      this.currentFolder = this.screens$[this.screenId].fileState;
-      this.setFiles();
-      this.setCursorAtFirst();
-    });
+    this._router.navigateByUrl(`fs/?path=${file.path}`);
   }
 
   reactToKeypress(): void {
@@ -135,9 +112,12 @@ export class FilelistComponent implements OnInit, DoCheck {
     if (!e) {
       return;
     }
+
+    // Use timestamp to avoid firing same event twice
     if (e.timeStamp === this.lastKeyPressTimestamp) {
       return;
     }
+
     switch (e.key) {
       case 'Tab':
         this.setCursorAtFirst();
@@ -160,6 +140,7 @@ export class FilelistComponent implements OnInit, DoCheck {
       default:
         break;
     }
+
     this.lastKeyPressTimestamp = e.timeStamp;
   }
 
@@ -168,7 +149,7 @@ export class FilelistComponent implements OnInit, DoCheck {
     this.currentIndex = this.files.indexOf(file);
   }
 
-  setCurrentTime(obj): void {
+  setClockAndInterval(obj): void {
     obj.currentTime = obj.timeService.getCurrentTime();
     setInterval(function() {
       obj.currentTime = obj.timeService.getCurrentTime();
@@ -188,9 +169,34 @@ export class FilelistComponent implements OnInit, DoCheck {
     this.setCursor(this.files.length - 1);
   }
 
-  setFiles(): void {
-    this.files = this.currentFolder.children;
-    this.currentIndex = 0;
+  subscribeToStore() {
+    // Filestate is stored per screen, so we subscribe to the screens change
+    this.screens.subscribe((screens: Screen[]) => {
+      this.screen = [...screens][this.screenId];
+      this.currentFolder = this.screen.fileState;
+      if (!!this.currentFolder) {
+        this.files = this.currentFolder.children;
+      }
+    });
+
+    // Subscribe to the app current path and update filestate
+    this.currentPath.subscribe((path) => {
+      // Initial state update or active screen
+      if(this.screen.isActive || !this.screen.isInitialised) {
+        this.filesService.updateFileState(path, this.screenId, this.screen).then(() => {
+          if(this.filesService.calls === 1) {
+            // First call
+            this.setClockAndInterval(this);
+            this.calculateSummaryStats();
+            if (this.isActiveScreen) {
+              this.setCursorAtFirst();
+            }
+          }
+          this.unSelectActiveFile();
+          this.setCursorAtFirst();
+        });
+      }
+    });
   }
 
   traverse(num: number): void {
@@ -212,8 +218,11 @@ export class FilelistComponent implements OnInit, DoCheck {
     this.traverse(-1);
   }
 
-  unSelectFiles(): void {
+  unSelectActiveFile(): void {
     this.selectedFile = null;
+  }
+
+  zeroCurrIndex() {
     this.currentIndex = 0;
   }
 }

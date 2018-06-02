@@ -1,0 +1,12 @@
+<div class="error-wrapper" [ngClass]="activeTheme$">
+  <div class="error">
+    <p>Failed opening the <span class="uri">{{ path$ }}</span></p>
+    Possible reasons:
+    <ul>
+      <li>Directory/file can't be accessed</li>
+      <li>Path is invalid</li>
+    </ul>
+    <p>Provide valid path as <span class="uri">http://localhost:4200/fs?path=YOURPATH'</span> or go to <a (click)="togglePathError()" routerLink=""><span class="uri">http://localhost:4200/</span></a>
+      to start with the root</p>
+  </div>
+</div>

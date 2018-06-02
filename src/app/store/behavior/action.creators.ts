@@ -1,10 +1,14 @@
 import {
+  CHANGE_CURRENT_PATH,
   CHANGE_ACTIVE_SCREEN,
   INITIALIZE_SCREENS,
   MOVE_TO_NEXT_SCREEN,
   MOVE_TO_SCREEN,
   SWITCH_THEME,
-  UPDATE_FILE_STATE} from './actions';
+  UPDATE_FILE_STATE,
+  TOGGLE_ERROR,
+  INITIALIZE_SCREEN
+} from './actions';
 
 export function switchThemeAction(newTheme) {
   return {
@@ -19,6 +23,20 @@ export function changeActiveScreenAction(screens, activeScreen) {
     screens,
     activeScreen
   };
+}
+
+export function changeCurrentPathAction(newPath) {
+  return {
+    type: CHANGE_CURRENT_PATH,
+    newPath
+  };
+}
+
+export function initializeScreenAction(screens) {
+  return {
+    type: INITIALIZE_SCREEN,
+    screens
+  }
 }
 
 export function initializeScreensAction(screens) {
@@ -41,6 +59,12 @@ export function moveToScreenAction(screens, activeScreen) {
     type: MOVE_TO_SCREEN,
     screens,
     activeScreen
+  };
+}
+
+export function toggleErrorAction() {
+  return {
+    type: TOGGLE_ERROR
   };
 }
 
