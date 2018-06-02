@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Output } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgRedux, select } from '@angular-redux/store';
 
@@ -14,7 +14,7 @@ import { ThemeActions } from '../store/behavior/theme.actions';
   styleUrls: ['./fs.component.scss']
 })
 
-export class FsComponent implements OnInit {
+export class FsComponent implements OnInit, OnDestroy {
   @select() activeTheme;
   @Output() activeTheme$: string;
   @select() screens;
@@ -25,6 +25,7 @@ export class FsComponent implements OnInit {
   @Output() currentPath$: string;
   @select() pathError;
   @Output() pathError$;
+  subscriptions = [];
 
   constructor(private store: NgRedux<IAppState>,
               private filesActions: FilesActions,
@@ -36,6 +37,12 @@ export class FsComponent implements OnInit {
   ngOnInit() {
     this.setSubscriptionToStore();
     this.screenActions.setupScreens();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((s) => {
+      s.unsubscribe();
+    });
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -67,29 +74,27 @@ export class FsComponent implements OnInit {
     this.activeScreen$.event = event;
   }
 
-  // redirectToErrorPage() {
-  //   this._router.navigate()
-  // }
-
   setSubscriptionToStore() {
-    this.screens.subscribe((screens: Screen[]) => {
+    const sub1 = this.screens.subscribe((screens: Screen[]) => {
       this.screens$ = screens;
     });
-    this.activeTheme.subscribe((theme: string) => {
+    const sub2 = this.activeTheme.subscribe((theme: string) => {
       this.activeTheme$ = theme;
     });
-    this.activeScreen.subscribe((screen: Screen) => {
+    const sub3 = this.activeScreen.subscribe((screen: Screen) => {
       this.activeScreen$ = screen;
     });
-    this.currentPath.subscribe((path: string) => {
+    const sub4 = this.currentPath.subscribe((path: string) => {
       // this.currentPath$ = path;
     });
-    this.pathError.subscribe((error: boolean) => {
+    const sub5 = this.pathError.subscribe((error: boolean) => {
       this.pathError$ = error;
-      if(error) {
+      if (error) {
         this.navigateToErrorPage();
       }
-    })
+    });
+
+    this.subscriptions.push.apply(this.subscriptions, [sub1, sub2, sub3, sub4, sub5]);
   }
 
 }

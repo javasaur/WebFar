@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, DoCheck, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { select } from '@angular-redux/store';
 import { Router } from '@angular/router';
 
@@ -15,7 +15,7 @@ import { FilesActions } from '../store/behavior/files.actions';
   providers: [FilesService]
 })
 
-export class FilelistComponent implements OnInit, DoCheck {
+export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   // Current filelist and it's content
   currentFolder: File;
   files: File[];
@@ -41,6 +41,7 @@ export class FilelistComponent implements OnInit, DoCheck {
   screen: Screen;
   @Output() moveToThisScreen = new EventEmitter<number>();
   @select() currentPath;
+  subscriptions = [];
 
   constructor(private timeService: TimeService,
               private filesService: FilesService,
@@ -69,6 +70,12 @@ export class FilelistComponent implements OnInit, DoCheck {
       this.zeroCurrIndex();
       this.screen.isDeactivated = true;
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((s) => {
+      s.unsubscribe();
+    });
   }
 
   calculateSummaryStats(): void {
@@ -171,7 +178,7 @@ export class FilelistComponent implements OnInit, DoCheck {
 
   subscribeToStore() {
     // Filestate is stored per screen, so we subscribe to the screens change
-    this.screens.subscribe((screens: Screen[]) => {
+    const sub1 = this.screens.subscribe((screens: Screen[]) => {
       this.screen = [...screens][this.screenId];
       this.currentFolder = this.screen.fileState;
       if (!!this.currentFolder) {
@@ -180,9 +187,9 @@ export class FilelistComponent implements OnInit, DoCheck {
     });
 
     // Subscribe to the app current path and update filestate
-    this.currentPath.subscribe((path) => {
+    const sub2 = this.currentPath.subscribe((path) => {
       // Initial state update or active screen
-      if(this.screen.isActive || !this.screen.isInitialised) {
+      if (this.screen.isActive || !this.screen.isInitialised) {
         this.filesService.updateFileState(path, this.screenId, this.screen).then(() => {
           if(this.filesService.calls === 1) {
             // First call
@@ -197,6 +204,8 @@ export class FilelistComponent implements OnInit, DoCheck {
         });
       }
     });
+
+    this.subscriptions.push.apply(this.subscriptions, [sub1, sub2]);
   }
 
   traverse(num: number): void {

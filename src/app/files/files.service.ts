@@ -150,7 +150,7 @@ export class FilesService {
 
       await fetchParent;
 
-      if(!screen.isInitialised) {
+      if (!screen.isInitialised) {
         this.screenActions.initializeScreen(screenId);
       }
       this.filesActions.updateFileState(screenId, file);

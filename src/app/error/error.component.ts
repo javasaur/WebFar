@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { select } from '@angular-redux/store';
 
 import { FilesActions } from '../store/behavior/files.actions';
@@ -8,23 +8,32 @@ import { FilesActions } from '../store/behavior/files.actions';
   templateUrl: './error.component.html',
   styleUrls: ['./error.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss'],
 })
-export class ErrorComponent implements OnInit {
+export class ErrorComponent implements OnInit, OnDestroy {
   @Input() themeClass: string;
   path$: string;
   @select() currentPath;
   @select() activeTheme;
   activeTheme$: string;
+  subscriptions = [];
 
   constructor(private filesActions: FilesActions) { }
 
   ngOnInit() {
-    this.currentPath.subscribe((path) => {
+    const sub1 = this.currentPath.subscribe((path) => {
       this.path$ = path;
     });
 
-    this.activeTheme.subscribe((theme) => {
+    const sub2 = this.activeTheme.subscribe((theme) => {
       this.activeTheme$ = theme;
     });
+
+    this.subscriptions.push.apply(this.subscriptions, [sub1, sub2]);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((s) => {
+      s.unsubscribe();
+    })
   }
 
   togglePathError() {
