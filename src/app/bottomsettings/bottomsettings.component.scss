@@ -19,3 +19,12 @@ ul.bottom-menu {
     padding: 5px;
   }
 }
+
+.option:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.option {
+  display: inline-block;
+}

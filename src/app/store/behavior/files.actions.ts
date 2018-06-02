@@ -3,10 +3,13 @@ import { NgRedux } from '@angular-redux/store';
 
 import { IAppState } from '../state/IAppState';
 import {
+  changeCurrentHandleOptionAction,
   changeCurrentPathAction,
+  toggleEditorModeAction,
   toggleErrorAction,
   updateFileStateAction
 } from './action.creators';
+import { getNextIndexOrFirst } from '../../utils/CustomFunctions';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +21,18 @@ export class FilesActions {
     this.store.dispatch(changeCurrentPathAction(newPath));
   }
 
+  changeFileHandleOption() {
+    const state = {...this.store.getState()};
+    let openFilesOption, openFilesOptions;
+    ({openFilesOption, openFilesOptions} = state);
+    const ind = openFilesOptions.indexOf(openFilesOption);
+    console.log(ind);
+    const newAction = openFilesOptions[getNextIndexOrFirst(openFilesOptions, ind + 1)];
+    console.log(newAction);
+    console.log(getNextIndexOrFirst(openFilesOptions, ind + 1));
+    this.store.dispatch(changeCurrentHandleOptionAction(newAction));
+  }
+
   updateFileState(screenId, fileState) {
     const screens = [...this.store.getState().screens];
     const screen = screens[screenId];
@@ -27,6 +42,10 @@ export class FilesActions {
 
   togglePathError() {
     this.store.dispatch(toggleErrorAction());
+  }
+
+  toggleEditorMode() {
+    this.store.dispatch(toggleEditorModeAction());
   }
 }
 

@@ -5,12 +5,12 @@ import {
   MOVE_TO_NEXT_SCREEN,
   MOVE_TO_SCREEN,
   SWITCH_THEME,
-  UPDATE_FILE_STATE, TOGGLE_ERROR, INITIALIZE_SCREEN
+  UPDATE_FILE_STATE, TOGGLE_ERROR, INITIALIZE_SCREEN, CHANGE_CURRENT_HANDLE_OPTION, TOGGLE_EDITOR_MODE
 } from '../behavior/actions';
 import { IAppState } from './IAppState';
 
 export const INITIAL_STATE: IAppState = {
-  activeTheme: 'classic',
+  activeTheme: 'dark',
   availableThemes: ['classic', 'dark', 'clumsy'],
   screensAmount: 2,
   defaultScreen: 1,
@@ -18,7 +18,9 @@ export const INITIAL_STATE: IAppState = {
   activeScreen: null,
   currentPath: null,
   pathError: false,
-  openFilesOption: 'app'
+  openFilesOption: 'app',
+  openFilesOptions: ['app', 'os'],
+  editorMode: false,
 };
 
 export function rootReducer(state: IAppState, action): IAppState {
@@ -32,6 +34,11 @@ export function rootReducer(state: IAppState, action): IAppState {
     case CHANGE_CURRENT_PATH:
       return Object.assign({}, state, {
         currentPath: action.newPath
+      });
+
+    case CHANGE_CURRENT_HANDLE_OPTION:
+      return Object.assign({}, state, {
+        openFilesOption: action.newAction
       });
 
     case INITIALIZE_SCREEN:
@@ -64,6 +71,11 @@ export function rootReducer(state: IAppState, action): IAppState {
     case TOGGLE_ERROR:
       return Object.assign({}, state, {
         pathError: !state.pathError
+      });
+
+    case TOGGLE_EDITOR_MODE:
+      return Object.assign({}, state, {
+        editorMode: !state.editorMode
       });
 
     case UPDATE_FILE_STATE:

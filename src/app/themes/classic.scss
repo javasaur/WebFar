@@ -54,3 +54,24 @@ $IMPORTANT: #ffb5bb;
   border-color: $EFFECTS_BORDER;
 }
 
+.classic.fileeditor {
+  background-color: $MAIN_COLOR;
+  color: $FONT
+}
+
+.classic.fileeditor .header {
+  border-color: $EFFECTS_BORDER;
+}
+
+.classic.fileeditor .content {
+  border-color: $EFFECTS_BORDER;
+}
+
+.classic.fileeditor .important {
+  color: $IMPORTANT;
+}
+
+.classic.fileeditor a {
+  color: $FONT;
+}
+

@@ -57,6 +57,12 @@ app.post('/parent/', function(req, res) {
     res.status(200).send({parent: parent});
 })
 
+app.post('/content/', function(req, res) {
+  const buffer = fs.readFileSync(req.body.path);
+  const content = JSON.stringify(buffer);
+  res.status(200).send({content: content});
+})
+
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res) {

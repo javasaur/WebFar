@@ -52,3 +52,24 @@ $IMPORTANT: #060370;
 .clumsy.bottom-menu li {
   border-color: $EFFECTS_BORDER;
 }
+
+.clumsy.fileeditor {
+  background-color: $MAIN_COLOR;
+  color: $FONT
+}
+
+.clumsy.fileeditor .header {
+  border-color: $EFFECTS_BORDER;
+}
+
+.clumsy.fileeditor .content {
+  border-color: $EFFECTS_BORDER;
+}
+
+.clumsy.fileeditor .important {
+  color: $IMPORTANT;
+}
+
+.clumsy.fileeditor a {
+  color: $FONT;
+}

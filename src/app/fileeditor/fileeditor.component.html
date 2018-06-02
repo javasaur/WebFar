@@ -1,3 +1,12 @@
-<p>
-  fileeditor works!
-</p>
+<div class="fileeditor" [ngClass]="activeTheme$">
+  <div class="header">
+    <div class="left">
+      <span class="important">{{ filename }}</span>
+    </div>
+    <div class="right">
+      <a routerLink="/" (click)="disableEditorMode()">Go back <span class="important"> {{ parent }}</span></a>
+    </div>
+   </div>
+  <div class="content" [innerHTML]="content"></div>
+</div>
+

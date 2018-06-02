@@ -7,7 +7,7 @@ import {
   SWITCH_THEME,
   UPDATE_FILE_STATE,
   TOGGLE_ERROR,
-  INITIALIZE_SCREEN
+  INITIALIZE_SCREEN, CHANGE_CURRENT_HANDLE_OPTION, TOGGLE_EDITOR_MODE
 } from './actions';
 
 export function switchThemeAction(newTheme) {
@@ -29,6 +29,13 @@ export function changeCurrentPathAction(newPath) {
   return {
     type: CHANGE_CURRENT_PATH,
     newPath
+  };
+}
+
+export function changeCurrentHandleOptionAction(newAction) {
+  return {
+    type: CHANGE_CURRENT_HANDLE_OPTION,
+    newAction
   };
 }
 
@@ -65,6 +72,12 @@ export function moveToScreenAction(screens, activeScreen) {
 export function toggleErrorAction() {
   return {
     type: TOGGLE_ERROR
+  };
+}
+
+export function toggleEditorModeAction() {
+  return {
+    type: TOGGLE_EDITOR_MODE
   };
 }
 

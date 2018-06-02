@@ -1,5 +1,5 @@
 <ul class="bottom-menu" [ngClass]="activeTheme$">
   <li><span class="important">q</span> - switch theme</li>
   <li><span class="important">TAB</span> - switch screens</li>
-  <li>Open files in <span class="important">OS</span></li>
+  <li>Open files in <span class="important option" (click)="changeOption()">{{ openFilesOption$ | uppercase }}</span></li>
 </ul>

@@ -10,4 +10,6 @@ export interface IAppState {
   currentPath: string | null;
   pathError: boolean;
   openFilesOption: string;
+  openFilesOptions: string[];
+  editorMode: boolean;
 }

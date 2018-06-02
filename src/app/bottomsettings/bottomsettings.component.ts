@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { select } from '@angular-redux/store';
+import {FilesActions} from '../store/behavior/files.actions';
 
 @Component({
   selector: 'app-bottomsettings',
@@ -9,13 +10,19 @@ import { select } from '@angular-redux/store';
 export class BottomsettingsComponent implements OnInit, OnDestroy {
   @select() activeTheme;
   activeTheme$: string;
+  @select() openFilesOption;
+  openFilesOption$: string;
   subscriptions = [];
 
-  constructor() {}
+  constructor(private filesActions: FilesActions) {}
 
   ngOnInit() {
     const sub1 = this.activeTheme.subscribe((theme) => {
       this.activeTheme$ = theme;
+    });
+
+    const sub2 = this.openFilesOption.subscribe((theme) => {
+      this.openFilesOption$ = theme;
     });
 
     this.subscriptions.push(sub1);
@@ -25,6 +32,10 @@ export class BottomsettingsComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => {
       s.unsubscribe();
     });
+  }
+
+  changeOption() {
+    this.filesActions.changeFileHandleOption();
   }
 
 }

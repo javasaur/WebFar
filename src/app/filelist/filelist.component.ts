@@ -35,12 +35,13 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   @Input() keyEvent: any;
   @Input() screenId: number;
   @select() screens;
-
+  @select() currentPath;
+  @select() openFilesOption;
+  openFilesOption$: string;
 
   // Current screen abstraction and related event
   screen: Screen;
   @Output() moveToThisScreen = new EventEmitter<number>();
-  @select() currentPath;
   subscriptions = [];
 
   constructor(private timeService: TimeService,
@@ -107,11 +108,20 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
 
   openFile(file: File): void {
     if (file.isFile()) {
-      this.filesService.passControlToOS(file);
-      return;
+      if (this.openFilesOption$ === 'os') {
+        console.log('os');
+        this.filesService.passControlToOS(file);
+        return;
+      }
+
+      if (this.openFilesOption$ === 'app') {
+        this.filesActions.toggleEditorMode();
+        this._router.navigateByUrl(`editor?path=${file.path}`);
+        return;
+      }
     }
 
-    this._router.navigateByUrl(`fs/?path=${file.path}`);
+    this._router.navigateByUrl(`fs?path=${file.path}`);
   }
 
   reactToKeypress(): void {
@@ -189,7 +199,8 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
     // Subscribe to the app current path and update filestate
     const sub2 = this.currentPath.subscribe((path) => {
       // Initial state update or active screen
-      if (this.screen.isActive || !this.screen.isInitialised) {
+      if ((this.screen.isActive || !this.screen.isInitialised)) {
+        console.log('path changed');
         this.filesService.updateFileState(path, this.screenId, this.screen).then(() => {
           if (this.filesService.calls === 1) {
             // First call
@@ -205,7 +216,11 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
       }
     });
 
-    this.subscriptions.push.apply(this.subscriptions, [sub1, sub2]);
+    const sub3 = this.openFilesOption.subscribe((option) => {
+      this.openFilesOption$ = option;
+    })
+
+    this.subscriptions.push.apply(this.subscriptions, [sub1, sub2, sub3]);
   }
 
   traverse(num: number): void {

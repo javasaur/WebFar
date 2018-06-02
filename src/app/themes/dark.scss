@@ -52,3 +52,25 @@ $IMPORTANT: #ffa011;
 .dark.bottom-menu li {
   border-color: $EFFECTS_BORDER;
 }
+
+
+.dark.fileeditor {
+  background-color: $MAIN_COLOR;
+  color: $FONT
+}
+
+.dark.fileeditor .header {
+  border-color: $EFFECTS_BORDER;
+}
+
+.dark.fileeditor .content {
+  border-color: $EFFECTS_BORDER;
+}
+
+.dark.fileeditor .important {
+  color: $IMPORTANT;
+}
+
+.dark.fileeditor a {
+  color: $FONT;
+}

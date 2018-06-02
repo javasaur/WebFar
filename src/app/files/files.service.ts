@@ -25,26 +25,29 @@ export class FilesService {
               private screenActions: ScreenActions) {
   }
 
-  public getContentOfDir(dir) {
+  public getContentOfDir(path) {
     const body = {
-      path: dir
+      path: path
     };
     return this.http.post('http://localhost:3000/folder', body).toPromise();
   }
 
-  public getParentOfDir(dir) {
+  public getContentOfFile(path) {
     const body = {
-      path: dir
+      path: path
+    };
+    return this.http.post('http://localhost:3000/content', body).toPromise();
+  }
+
+  public getParentOfDir(path) {
+    const body = {
+      path: path
     };
     return this.http.post('http://localhost:3000/parent', body).toPromise();
   }
 
   public getRoot() {
     return this.http.get('http://localhost:3000/root').toPromise();
-  }
-
-  async initializeFileState(screenId: number, screen) {
-    return this.updateFileState('root', screenId, screen);
   }
 
   public async passControlToOS(file) {
@@ -56,11 +59,11 @@ export class FilesService {
 
   public async updateFileState(toFile, screenId, screen) {
     // Don't start load if got path error
-    if(this.store.getState().pathError) {
+    if (this.store.getState().pathError) {
       return;
     }
 
-    if(!!this.path) {
+    if  (!!this.path) {
       this.path = (typeof toFile === 'object') ? toFile.path : toFile;
       // this.path = this.path.replace(/\*/g, '/');
     }
@@ -88,7 +91,7 @@ export class FilesService {
 
       // Expansion/folding of folder
       if (toFile !== 'root') {
-        if(typeof toFile === 'object') {
+        if (typeof toFile === 'object') {
           file = toFile;
         } else {
           file = new FileBuilder()
@@ -154,7 +157,7 @@ export class FilesService {
         this.screenActions.initializeScreen(screenId);
       }
       this.filesActions.updateFileState(screenId, file);
-    } catch(err) {
+    } catch (err) {
       this.filesActions.togglePathError();
     }
 
