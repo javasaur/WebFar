@@ -20,11 +20,11 @@ ul.bottom-menu {
   }
 }
 
-.option:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
 .option {
   display: inline-block;
 }
+
+.option:hover {
+  cursor: pointer;
+}
+

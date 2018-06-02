@@ -23,6 +23,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   selectedFile: File;
   currentTime: string;
   lastKeyPressTimestamp = 0; // For correct key-events handling
+  openFilesOption$: string;
 
   // Stats for summary block
   sumStatsFolders: number;
@@ -37,7 +38,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   @select() screens;
   @select() currentPath;
   @select() openFilesOption;
-  openFilesOption$: string;
+
 
   // Current screen abstraction and related event
   screen: Screen;
@@ -109,7 +110,6 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   openFile(file: File): void {
     if (file.isFile()) {
       if (this.openFilesOption$ === 'os') {
-        console.log('os');
         this.filesService.passControlToOS(file);
         return;
       }
@@ -200,7 +200,6 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
     const sub2 = this.currentPath.subscribe((path) => {
       // Initial state update or active screen
       if ((this.screen.isActive || !this.screen.isInitialised)) {
-        console.log('path changed');
         this.filesService.updateFileState(path, this.screenId, this.screen).then(() => {
           if (this.filesService.calls === 1) {
             // First call
@@ -218,7 +217,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
 
     const sub3 = this.openFilesOption.subscribe((option) => {
       this.openFilesOption$ = option;
-    })
+    });
 
     this.subscriptions.push.apply(this.subscriptions, [sub1, sub2, sub3]);
   }

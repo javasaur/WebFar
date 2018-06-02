@@ -34,7 +34,6 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!!event && event instanceof RoutesRecognized) {
         const path = event.state.root.firstChild.queryParams.path;
         if (!this.pathError$ && !this.editorMode$) {
-          console.log(this.editorMode$);
           this.filesActions.changeCurrentPath(path);
         }
       }

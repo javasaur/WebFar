@@ -65,7 +65,6 @@ export class FilesService {
 
     if  (!!this.path) {
       this.path = (typeof toFile === 'object') ? toFile.path : toFile;
-      // this.path = this.path.replace(/\*/g, '/');
     }
 
     try {

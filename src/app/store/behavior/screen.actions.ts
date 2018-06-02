@@ -70,7 +70,6 @@ export class ScreenActions {
   }
 }
 
-
 // Current screen index differs for switching screens and initial screen load
 function definePrevAndCurrScreen(screens, state, currNewId) {
   // The current active screen becomes previous

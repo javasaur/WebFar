@@ -1,21 +1,23 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import { FilesService } from '../files/files.service';
-import { Buffer } from 'buffer';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select } from '@angular-redux/store';
-import {ActivatedRoute, Event, Router, RoutesRecognized} from '@angular/router';
-import {FilesActions} from '../store/behavior/files.actions';
+import { Buffer } from 'buffer';
+
+import { FilesService } from '../files/files.service';
+import { FilesActions } from '../store/behavior/files.actions';
 
 @Component({
   selector: 'app-fileeditor',
   templateUrl: './fileeditor.component.html',
-  styleUrls: ['./fileeditor.component.css', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss']
+  styleUrls: ['./fileeditor.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss']
 })
+
 export class FileeditorComponent implements OnInit, OnDestroy {
+  @select() activeTheme;
   content: any;
   parent = '';
-  filename = 'general.txt';
+  filename: string;
   activeTheme$: string;
-  @select() activeTheme;
   subscriptions = [];
 
   constructor(private filesService: FilesService,
@@ -24,13 +26,12 @@ export class FileeditorComponent implements OnInit, OnDestroy {
               private filesActions: FilesActions) {}
 
   ngOnInit() {
-    console.log('initialized');
     const sub1 = this.activeTheme.subscribe((theme) => {
       this.activeTheme$ = theme;
     });
 
     const sub2 = this.route.queryParams.subscribe((params) => {
-      console.log('here');
+      this.filename = params.path; // temporary
       this.filesService.getContentOfFile(params.path).then((data: any) => {
         const buffer = JSON.parse(data.content).data;
         this.content = Buffer.from(buffer).toString('utf8').replace(/\n/g, '<br />');

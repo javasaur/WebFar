@@ -14,6 +14,7 @@ import { getNextIndexOrFirst } from '../../utils/CustomFunctions';
 @Injectable({
   providedIn: 'root'
 })
+
 export class FilesActions {
   constructor(private store: NgRedux<IAppState>) {}
 
@@ -26,10 +27,7 @@ export class FilesActions {
     let openFilesOption, openFilesOptions;
     ({openFilesOption, openFilesOptions} = state);
     const ind = openFilesOptions.indexOf(openFilesOption);
-    console.log(ind);
     const newAction = openFilesOptions[getNextIndexOrFirst(openFilesOptions, ind + 1)];
-    console.log(newAction);
-    console.log(getNextIndexOrFirst(openFilesOptions, ind + 1));
     this.store.dispatch(changeCurrentHandleOptionAction(newAction));
   }
 

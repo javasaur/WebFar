@@ -4,7 +4,7 @@
       <span class="important">{{ filename }}</span>
     </div>
     <div class="right">
-      <a routerLink="/" (click)="disableEditorMode()">Go back <span class="important"> {{ parent }}</span></a>
+      <a class="important" routerLink="/" (click)="disableEditorMode()">Go back  {{ parent }}</a>
     </div>
    </div>
   <div class="content" [innerHTML]="content"></div>

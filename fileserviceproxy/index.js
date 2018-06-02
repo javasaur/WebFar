@@ -70,7 +70,6 @@ app.get('/', function (req, res) {
 });
 
 app.post('/file/', function(req, res) {
-    console.log('openung', req.body.path);
     exec("\"" + req.body.path + "\"");
     res.status(200).send({});
 })

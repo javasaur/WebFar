@@ -8,11 +8,12 @@ import { FilesActions } from '../store/behavior/files.actions';
   templateUrl: './error.component.html',
   styleUrls: ['./error.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss'],
 })
+
 export class ErrorComponent implements OnInit, OnDestroy {
   @Input() themeClass: string;
-  path$: string;
   @select() currentPath;
   @select() activeTheme;
+  path$: string;
   activeTheme$: string;
   subscriptions = [];
 
@@ -33,7 +34,7 @@ export class ErrorComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((s) => {
       s.unsubscribe();
-    })
+    });
   }
 
   togglePathError() {
