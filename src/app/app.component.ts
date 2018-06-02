@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const sub2 = this._router.events.subscribe((event: Event) => {
       if (!!event && event instanceof RoutesRecognized) {
         const path = event.state.root.firstChild.queryParams.path;
-        if(!this.pathError$) {
+        if (!this.pathError$) {
           this.filesActions.changeCurrentPath(path);
         }
       }

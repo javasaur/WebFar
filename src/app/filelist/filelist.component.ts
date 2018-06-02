@@ -191,7 +191,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
       // Initial state update or active screen
       if (this.screen.isActive || !this.screen.isInitialised) {
         this.filesService.updateFileState(path, this.screenId, this.screen).then(() => {
-          if(this.filesService.calls === 1) {
+          if (this.filesService.calls === 1) {
             // First call
             this.setClockAndInterval(this);
             this.calculateSummaryStats();

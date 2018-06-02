@@ -9,4 +9,5 @@ export interface IAppState {
   activeScreen: Screen | null;
   currentPath: string | null;
   pathError: boolean;
+  openFilesOption: string;
 }

@@ -1,0 +1,21 @@
+:host {
+  display: flex;
+  border-right: 11px solid #000;
+  border-left: 11px solid #000;
+}
+
+ul.bottom-menu {
+  margin: 0;
+  padding: 0;
+  flex: 1 1;
+  border-style: solid;
+  border-width: 2px;
+  list-style-type: none;
+
+  > li {
+    display: inline-block;
+    border-right-style: solid;
+    border-right-width: 2px;
+    padding: 5px;
+  }
+}

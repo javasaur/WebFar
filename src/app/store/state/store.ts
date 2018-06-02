@@ -10,14 +10,15 @@ import {
 import { IAppState } from './IAppState';
 
 export const INITIAL_STATE: IAppState = {
-  activeTheme: 'dark',
+  activeTheme: 'classic',
   availableThemes: ['classic', 'dark', 'clumsy'],
   screensAmount: 2,
   defaultScreen: 1,
   screens: [],
   activeScreen: null,
   currentPath: null,
-  pathError: false
+  pathError: false,
+  openFilesOption: 'app'
 };
 
 export function rootReducer(state: IAppState, action): IAppState {

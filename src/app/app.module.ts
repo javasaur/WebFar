@@ -13,6 +13,8 @@ import { ErrorComponent } from './error/error.component';
 import { FsComponent } from './fs/fs.component';
 
 import { CustomRouteReuseStrategy } from './utils/CustomRouteReuseStrategy';
+import { FileeditorComponent } from './fileeditor/fileeditor.component';
+import { BottomsettingsComponent } from './bottomsettings/bottomsettings.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { CustomRouteReuseStrategy } from './utils/CustomRouteReuseStrategy';
     FilelistComponent,
     ErrorComponent,
     FsComponent,
+    FileeditorComponent,
+    BottomsettingsComponent,
   ],
   imports: [
     BrowserModule,

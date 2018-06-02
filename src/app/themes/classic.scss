@@ -38,3 +38,19 @@ $IMPORTANT: #ffb5bb;
 .classic .uri {
   color: $IMPORTANT;
 }
+
+.classic.bottom-menu {
+  background-color: $MAIN_COLOR;
+  color: $FONT;
+  border-color: $EFFECTS_BORDER;
+}
+
+.classic.bottom-menu .important {
+  color: $IMPORTANT;
+  font-weight: bold;
+}
+
+.classic.bottom-menu li {
+  border-color: $EFFECTS_BORDER;
+}
+

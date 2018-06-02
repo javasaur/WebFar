@@ -37,3 +37,18 @@ $IMPORTANT: #ffa011;
 .dark .uri {
   color: $IMPORTANT;
 }
+
+.dark.bottom-menu {
+  background-color: $MAIN_COLOR;
+  color: $FONT;
+  border-color: $EFFECTS_BORDER;
+}
+
+.dark.bottom-menu .important {
+  color: $IMPORTANT;
+  font-weight: bold;
+}
+
+.dark.bottom-menu li {
+  border-color: $EFFECTS_BORDER;
+}

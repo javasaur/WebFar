@@ -37,3 +37,18 @@ $IMPORTANT: #060370;
 .clumsy .uri {
   color: $IMPORTANT;
 }
+
+.clumsy.bottom-menu {
+  background-color: $MAIN_COLOR;
+  color: $FONT;
+  border-color: $EFFECTS_BORDER;
+}
+
+.clumsy.bottom-menu .important {
+  color: $IMPORTANT;
+  font-weight: bold;
+}
+
+.clumsy.bottom-menu li {
+  border-color: $EFFECTS_BORDER;
+}
