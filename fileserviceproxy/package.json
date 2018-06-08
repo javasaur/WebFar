@@ -7,8 +7,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "start": "node index.js && exit 1",
-    "test": "echo \"Error: no test specifiedd\" && exit 1"
+    "start": "node index.js"
   },
   "author": "Feo",
   "license": "ISC",

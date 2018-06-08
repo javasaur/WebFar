@@ -4,7 +4,7 @@
   "scripts": {
     "postinstall": "cd FileServiceProxy && npm i",
     "ng": "ng",
-    "start": "ng serve --open",
+    "start": "concurrently \"ng serve --open\" \"cd fileserviceproxy && npm start\" --kill-others",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -22,6 +22,7 @@
     "@angular/platform-browser": "^6.0.0",
     "@angular/platform-browser-dynamic": "^6.0.0",
     "@angular/router": "^6.0.0",
+    "concurrently": "^3.5.1",
     "core-js": "^2.5.4",
     "cors": "^2.8.4",
     "moment": "^2.22.1",
