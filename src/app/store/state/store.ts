@@ -10,10 +10,10 @@ import {
 import { IAppState } from './IAppState';
 
 export const INITIAL_STATE: IAppState = {
-  activeTheme: 'dark',
+  activeTheme: 'classic',
   availableThemes: ['classic', 'dark', 'clumsy'],
-  screensAmount: 3,
-  defaultScreen: 2,
+  screensAmount: 2,
+  defaultScreen: 1,
   screens: [],
   activeScreen: null,
   currentPath: null,

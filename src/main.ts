@@ -10,12 +10,3 @@ if (environment.production) {
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.log(err));
-
-function defineCustomFunctions() {
-  Object.defineProperty(Array.prototype, 'getNextIndexOrFirst', {
-    enumerable: false,
-    value: function(nextIndex) {
-      return nextIndex >= this.length ? 0 : nextIndex;
-    }
-  });
-}
