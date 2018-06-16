@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { select } from '@angular-redux/store';
 
-import { MainService } from '../main.service';
+import { MainService } from '../globalservices/main.service';
 
 @Component({
   selector: 'app-error',

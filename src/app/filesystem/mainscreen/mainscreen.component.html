@@ -10,5 +10,5 @@
                 (removeFile)="removeFile($event)">
   </app-filelist>
 </div>
-<app-bottomsettings [openFilesOption]="openFilesOption$" [activeTheme]="activeTheme$" (openBGScreen)="toggleBGScreen()"></app-bottomsettings>
+<app-bottomsettings (openBGScreen)="toggleBGScreen()"></app-bottomsettings>
 <app-bgactions [hidden]="!showBGActionsScreen" (closeBGScreen)="toggleBGScreen()"></app-bgactions>

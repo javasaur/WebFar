@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { select } from '@angular-redux/store';
+import { Store } from '@ngrx/store';
 
 import { Buffer } from 'buffer';
-import { MainService } from '../../main.service';
+import { IAppState } from '../../store/IAppState';
+import { MainService } from '../../globalservices/main.service';
 
 @Component({
   selector: 'app-fileeditor',
@@ -11,19 +12,19 @@ import { MainService } from '../../main.service';
   styleUrls: ['./fileeditor.component.scss', '../../themes/classic.scss', '../../themes/dark.scss', '../../themes/clumsy.scss']
 })
 export class FileeditorComponent implements OnInit, OnDestroy {
-  @select() activeTheme;
   content: any;
   parent = '';
   filename: string;
-  activeTheme$: string;
+  activeTheme: string;
   subscriptions = [];
 
   constructor(private _router: Router,
               private route: ActivatedRoute,
-              private mainService: MainService) {}
+              private mainService: MainService,
+              private store: Store<IAppState>) {}
 
   ngOnInit() {
-    const sub1 = this.activeTheme.subscribe((theme) => this.activeTheme$ = theme);
+    const sub1 = this.store.select(state => state).subscribe(s => this.activeTheme = s['app']['activeTheme']);
 
     const sub2 = this.route.queryParams.subscribe((params) => {
       this.filename = params.path; // temporary

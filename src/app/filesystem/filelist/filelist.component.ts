@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { select } from '@angular-redux/store';
 
 import { File } from '../file.model';
-import { MainService } from '../../main.service';
+import { MainService } from '../../globalservices/main.service';
 import { Screen } from '../screen/screen.model';
 
 @Component({

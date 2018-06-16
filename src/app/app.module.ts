@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { NgRedux, NgReduxModule } from '@angular-redux/store';
 import { RouteReuseStrategy } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,8 +14,10 @@ import { ErrorComponent } from './error/error.component';
 import { FileeditorComponent } from './filesystem/fileeditor/fileeditor.component';
 import { FilelistComponent } from './filesystem/filelist/filelist.component';
 import { IAppState } from './store/IAppState';
-import { INITIAL_STATE, rootReducer } from './store/store';
+import { INITIAL_STATE, rootReducer} from './store/store';
 import { MainScreenComponent } from './filesystem/mainscreen/mainscreen.component';
+import { mainReducer } from './store/store';
+
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import { MainScreenComponent } from './filesystem/mainscreen/mainscreen.componen
     HttpClientModule,
     NgReduxModule,
     AppRoutingModule,
+    StoreModule.forRoot({app: mainReducer}, {})
   ],
   providers: [{
    provide: RouteReuseStrategy,

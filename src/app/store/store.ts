@@ -1,3 +1,5 @@
+import {Action} from '@ngrx/store';
+
 import {
   ADD_BACKGROUND_PROCESS,
   CHANGE_ACTIVE_SCREEN,
@@ -72,6 +74,13 @@ export function rootReducer(state: IAppState, action): IAppState {
     case WRITE_TO_BUFFER:
       return {...state, buffer: action.buffer};
 
+    default:
+      return state;
+  }
+}
+
+export function mainReducer(state: IAppState = INITIAL_STATE, action: Action) {
+  switch (action.type) {
     default:
       return state;
   }

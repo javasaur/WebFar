@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Event, Router, RoutesRecognized } from '@angular/router';
 import { select } from '@angular-redux/store';
 
-import { MainService } from './main.service';
+import { MainService } from './globalservices/main.service';
 
 @Component({
   selector: 'app-root',
