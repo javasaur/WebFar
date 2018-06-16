@@ -23,9 +23,7 @@ export class FileeditorComponent implements OnInit, OnDestroy {
               private mainService: MainService) {}
 
   ngOnInit() {
-    const sub1 = this.activeTheme.subscribe((theme) => {
-      this.activeTheme$ = theme;
-    });
+    const sub1 = this.activeTheme.subscribe((theme) => this.activeTheme$ = theme);
 
     const sub2 = this.route.queryParams.subscribe((params) => {
       this.filename = params.path; // temporary

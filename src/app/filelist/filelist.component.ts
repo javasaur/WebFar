@@ -222,9 +222,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
       }
     });
 
-    const sub3 = this.openFilesOption.subscribe((option) => {
-      this.openFilesOption$ = option;
-    });
+    const sub3 = this.openFilesOption.subscribe((option) => this.openFilesOption$ = option);
 
     this.subscriptions.push.apply(this.subscriptions, [sub1, sub2, sub3]);
   }

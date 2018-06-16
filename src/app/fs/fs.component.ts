@@ -91,29 +91,17 @@ export class FsComponent implements OnInit, OnDestroy {
   }
 
   setSubscriptionToStore() {
-    const sub1 = this.screens.subscribe((screens: Screen[]) => {
-      this.screens$ = screens;
-    });
-    const sub2 = this.activeTheme.subscribe((theme: string) => {
-      this.activeTheme$ = theme;
-    });
-    const sub3 = this.activeScreen.subscribe((screen: Screen) => {
-      this.activeScreen$ = screen;
-    });
-    const sub4 = this.pathError.subscribe((error: boolean) => {
+    const sub1 = this.screens.subscribe((screens: Screen[]) => this.screens$ = screens);
+    const sub2 = this.activeTheme.subscribe((theme: string) => this.activeTheme$ = theme);
+    const sub3 = this.activeScreen.subscribe((screen: Screen) => this.activeScreen$ = screen);
+    const sub4 = this.openFilesOption.subscribe((option: string) => this.openFilesOption$ = option);
+    const sub5 = this.bgActions.subscribe((actions: BGAction[]) => this.bgActions$ = actions);
+    const sub6 = this.pathError.subscribe((error: boolean) => {
       this.pathError$ = error;
       if (error) {
         this.navigateToErrorPage();
       }
     });
-
-    const sub5 = this.openFilesOption.subscribe((option: string) => {
-      this.openFilesOption$ = option;
-    });
-
-    const sub6 = this.bgActions.subscribe((actions: BGAction[]) => {
-      this.bgActions$ = actions;
-    })
 
     this.subscriptions.push.apply(this.subscriptions, [sub1, sub2, sub3, sub4, sub5, sub6]);
   }

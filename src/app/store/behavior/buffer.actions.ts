@@ -12,7 +12,6 @@ export class BufferActions {
   constructor(private store: NgRedux<IAppState>) {}
 
   writeToBuffer(data: string) {
-    console.log(data);
     this.store.dispatch(writeToBufferAction(data));
   }
 

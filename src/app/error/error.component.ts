@@ -21,13 +21,8 @@ export class ErrorComponent implements OnInit, OnDestroy {
   constructor(private mainService: MainService) {}
 
   ngOnInit() {
-    const sub1 = this.currentPath.subscribe((path) => {
-      this.path$ = path;
-    });
-
-    const sub2 = this.activeTheme.subscribe((theme) => {
-      this.activeTheme$ = theme;
-    });
+    const sub1 = this.currentPath.subscribe((path) => this.path$ = path);
+    const sub2 = this.activeTheme.subscribe((theme) => this.activeTheme$ = theme);
 
     this.subscriptions.push.apply(this.subscriptions, [sub1, sub2]);
   }
