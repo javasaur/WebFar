@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {BGActions} from './bgactions.actions';
-import {BGActionStatus} from './bgactionstatus.enum';
-import {BGAction} from './bgaction.model';
 
+import { BGAction } from './bgaction.model';
+import { BGActions} from './bgactions.actions';
+import { BGActionStatus } from './bgactionstatus.enum';
 
 @Injectable({
   providedIn: 'root'

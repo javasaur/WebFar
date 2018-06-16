@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 
-import { IAppState } from '../store/state/IAppState';
-import { FilesActions } from '../store/behavior/files.actions';
-import { ScreenActions } from '../store/behavior/screen.actions';
 import { FileBuilder } from './filebuilder';
+import { FilesActions } from '../store/behavior/files.actions';
+import { IAppState } from '../store/state/IAppState';
+import { ScreenActions } from '../store/behavior/screen.actions';
+
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class FilesService {
   private path: string;
   private _calls = 0;

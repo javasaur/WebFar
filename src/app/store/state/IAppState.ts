@@ -1,5 +1,5 @@
+import { BGAction } from '../../bgactions/bgaction.model';
 import { Screen } from '../../fs/screen.model';
-import {BGAction} from '../../bgactions/bgaction.model';
 
 export interface IAppState {
   activeTheme: string;

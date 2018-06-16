@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
+import { BgactionsComponent } from './bgactions/bgactions.component';
 import { ErrorComponent } from './error/error.component';
-import {FsComponent} from './fs/fs.component';
-import {FileeditorComponent} from './fileeditor/fileeditor.component';
-import {BgactionsComponent} from './bgactions/bgactions.component';
+import { FileeditorComponent } from './fileeditor/fileeditor.component';
+import { FsComponent } from './fs/fs.component';
 
 const routes: Routes = [
   {

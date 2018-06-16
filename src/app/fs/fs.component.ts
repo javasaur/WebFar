@@ -1,18 +1,17 @@
-import { Component, HostListener, OnDestroy, OnInit, Output} from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, HostListener, OnDestroy, OnInit, Output } from '@angular/core';
 import { NgRedux, select } from '@angular-redux/store';
+import { Router } from '@angular/router';
 
-import { Screen } from './screen.model';
+import { BGAction } from '../bgactions/bgaction.model';
 import { IAppState } from '../store/state/IAppState';
-import {BGAction} from '../bgactions/bgaction.model';
-import {MainService} from '../main.service';
+import { MainService } from '../main.service';
+import { Screen } from './screen.model';
 
 @Component({
   selector: 'app-fs',
   templateUrl: './fs.component.html',
   styleUrls: ['./fs.component.scss']
 })
-
 export class FsComponent implements OnInit, OnDestroy {
   @select() activeTheme;
   @Output() activeTheme$: string;

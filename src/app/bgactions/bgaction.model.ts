@@ -1,4 +1,4 @@
-import {BGActionStatus} from './bgactionstatus.enum';
+import { BGActionStatus } from './bgactionstatus.enum';
 
 export class BGAction {
   constructor(description, status, startTime, endTime, error) {

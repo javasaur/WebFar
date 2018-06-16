@@ -1,15 +1,15 @@
-import {Injectable} from '@angular/core';
-import {FilesService} from './files/files.service';
-import {BGActionsService} from './bgactions/bgactions.service';
-import {NgRedux} from '@angular-redux/store';
-import {IAppState} from './store/state/IAppState';
-import {TimeService} from './time.service';
-import {BufferService} from './buffer.service';
-import {ThemeService} from './theme.service';
-import {ScreenService} from './screen.service';
-import {File} from './files/file.model';
-import { Screen } from './fs/screen.model';
+import { Injectable } from '@angular/core';
+import { NgRedux } from '@angular-redux/store';
 
+import { BGActionsService } from './bgactions/bgactions.service';
+import { BufferService } from './buffer.service';
+import { File } from './files/file.model';
+import { FilesService } from './files/files.service';
+import { IAppState } from './store/state/IAppState';
+import { Screen } from './fs/screen.model';
+import { ScreenService } from './screen.service';
+import { ThemeService } from './theme.service';
+import { TimeService } from './time.service';
 
 @Injectable({
   providedIn: 'root'

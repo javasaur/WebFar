@@ -1,6 +1,7 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {BGAction} from './bgaction.model';
-import {select} from '@angular-redux/store';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { select } from '@angular-redux/store';
+
+import { BGAction } from './bgaction.model';
 
 @Component({
   selector: 'app-bgactions',

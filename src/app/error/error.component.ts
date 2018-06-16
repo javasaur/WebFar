@@ -1,15 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { select } from '@angular-redux/store';
 
-import { FilesActions } from '../store/behavior/files.actions';
-import {MainService} from '../main.service';
+import { MainService } from '../main.service';
 
 @Component({
   selector: 'app-error',
   templateUrl: './error.component.html',
   styleUrls: ['./error.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss'],
 })
-
 export class ErrorComponent implements OnInit, OnDestroy {
   @Input() themeClass: string;
   @select() currentPath;

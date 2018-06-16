@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import {ThemeActions} from './store/behavior/theme.actions';
+
+import { ThemeActions } from './store/behavior/theme.actions';
 
 @Injectable({
   providedIn: 'root'

@@ -13,7 +13,6 @@ import { getNextIndexOrFirst } from '../../utils/CustomFunctions';
 @Injectable({
   providedIn: 'root'
 })
-
 export class ScreenActions {
   constructor(private store: NgRedux<IAppState>) {}
 

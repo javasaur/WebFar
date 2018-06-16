@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 
 import { IAppState } from '../state/IAppState';
-import {writeToBufferAction} from './action.creators';
+import { writeToBufferAction } from './action.creators';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class BufferActions {
   constructor(private store: NgRedux<IAppState>) {}
 

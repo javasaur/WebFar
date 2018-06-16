@@ -14,7 +14,6 @@ import { getNextIndexOrFirst } from '../../utils/CustomFunctions';
 @Injectable({
   providedIn: 'root'
 })
-
 export class FilesActions {
   constructor(private store: NgRedux<IAppState>) {}
 

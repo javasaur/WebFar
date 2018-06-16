@@ -1,7 +1,4 @@
-import { AssertionError } from 'assert';
-
 import { File } from './file.model';
-
 
 export class FileBuilder {
   constructor() {
@@ -26,11 +23,11 @@ export class FileBuilder {
 
   public build() {
     if (this._type === '') {
-      throw new AssertionError(`Type of file can't be empty.`);
+      throw new Error(`Type of file can't be empty.`);
     }
 
     if (this._path === '') {
-      throw new AssertionError(`Path can't be empty`);
+      throw new Error(`Path can't be empty`);
     }
 
     return new File(
