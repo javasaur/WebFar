@@ -70,17 +70,19 @@ export class FsComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    event.preventDefault();
-
     const key = event.key;
+
+    if (key === 'Tab') {
+      event.preventDefault();
+      this.screenActions.moveToNextScreen();
+    }
+
     if (key === 'q') {
       this.themeActions.switchTheme();
       return;
     }
 
-    if (key === 'Tab') {
-      this.screenActions.moveToNextScreen();
-    }
+
 
     this.passEventToActiveScreen(event);
   }

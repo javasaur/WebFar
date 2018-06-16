@@ -11,7 +11,6 @@ import { IAppState } from './store/state/IAppState';
 import { AppRoutingModule } from './app-routing.module';
 import { ErrorComponent } from './error/error.component';
 import { FsComponent } from './fs/fs.component';
-
 import { CustomRouteReuseStrategy } from './utils/CustomRouteReuseStrategy';
 import { FileeditorComponent } from './fileeditor/fileeditor.component';
 import { BottomsettingsComponent } from './bottomsettings/bottomsettings.component';
@@ -31,7 +30,7 @@ import { BgactionsComponent } from './bgactions/bgactions.component';
     BrowserModule,
     HttpClientModule,
     NgReduxModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [{
    provide: RouteReuseStrategy,
