@@ -20,8 +20,8 @@
           {{ action.status }}
         </div>
       </td>
-      <td>{{ action.startTime | date:'short' }} </td>
-      <td><ng-container *ngIf="!!action.endTime">{{ action.endTime | date:'short' }} </ng-container></td>
+      <td>{{ action.startTime | date:'M/d/yy, hh:mm:ss' }} </td>
+      <td><ng-container *ngIf="!!action.endTime">{{ action.endTime | date:'M/d/yy, hh:mm:ss' }} </ng-container></td>
       <td>
         <ng-container *ngIf="action.error">{{ action.error }}</ng-container>
         <ng-container *ngIf="!action.error">-</ng-container>

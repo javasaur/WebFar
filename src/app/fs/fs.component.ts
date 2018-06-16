@@ -82,8 +82,6 @@ export class FsComponent implements OnInit, OnDestroy {
       return;
     }
 
-
-
     this.passEventToActiveScreen(event);
   }
 

@@ -160,10 +160,14 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
         this.openFile(this.selectedFile);
         break;
       case 'c':
-        this.bufferActions.writeToBuffer(this.selectedFile.path);
+        if (e.ctrlKey) {
+          this.bufferActions.writeToBuffer(this.selectedFile.path);
+        }
         break;
       case 'v':
-        this.pasteFileFromBuffer.emit(this.selectedFile.path);
+        if (e.ctrlKey) {
+          this.pasteFileFromBuffer.emit(this.selectedFile.path);
+        }
         break;
       case 'Delete':
         this.removeFile.emit(this.selectedFile.path);
