@@ -3,11 +3,11 @@ import { NgRedux } from '@angular-redux/store';
 
 import { BGActionsService } from './bgactions/bgactions.service';
 import { BufferService } from './buffer.service';
-import { File } from './files/file.model';
-import { FilesService } from './files/files.service';
-import { IAppState } from './store/state/IAppState';
-import { Screen } from './fs/screen.model';
-import { ScreenService } from './screen.service';
+import { File } from './filesystem/file.model';
+import { FilesService } from './filesystem/files.service';
+import { IAppState } from './store/IAppState';
+import { Screen } from './filesystem/screen/screen.model';
+import { ScreenService } from './filesystem/screen/screen.service';
 import { ThemeService } from './theme.service';
 import { TimeService } from './time.service';
 

@@ -3,12 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { select } from '@angular-redux/store';
 
 import { Buffer } from 'buffer';
-import { MainService } from '../main.service';
+import { MainService } from '../../main.service';
 
 @Component({
   selector: 'app-fileeditor',
   templateUrl: './fileeditor.component.html',
-  styleUrls: ['./fileeditor.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss']
+  styleUrls: ['./fileeditor.component.scss', '../../themes/classic.scss', '../../themes/dark.scss', '../../themes/clumsy.scss']
 })
 export class FileeditorComponent implements OnInit, OnDestroy {
   @select() activeTheme;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ScreenActions } from './store/behavior/screen.actions';
+import { ScreenActions } from '../screen.actions';
 
 @Injectable({
   providedIn: 'root'

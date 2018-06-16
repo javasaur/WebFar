@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BufferActions } from './store/behavior/buffer.actions';
+import { BufferActions } from './store/actions/buffer.actions';
 
 @Injectable({
   providedIn: 'root'

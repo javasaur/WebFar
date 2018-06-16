@@ -12,7 +12,7 @@ import {
   TOGGLE_ERROR,
   UPDATE_FILE_STATE,
   WRITE_TO_BUFFER,
-} from '../behavior/actions';
+} from './actions/actions';
 import { IAppState } from './IAppState';
 
 export const INITIAL_STATE: IAppState = {

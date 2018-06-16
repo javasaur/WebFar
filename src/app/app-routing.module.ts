@@ -3,8 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { BgactionsComponent } from './bgactions/bgactions.component';
 import { ErrorComponent } from './error/error.component';
-import { FileeditorComponent } from './fileeditor/fileeditor.component';
-import { FsComponent } from './fs/fs.component';
+import { FileeditorComponent } from './filesystem/fileeditor/fileeditor.component';
+import { MainScreenComponent } from './filesystem/mainscreen/mainscreen.component';
 
 const routes: Routes = [
   {
@@ -14,14 +14,14 @@ const routes: Routes = [
   },
   {
     path: 'fs',
-    component: FsComponent,
+    component: MainScreenComponent,
     data: {
       reuse: true
     }
   },
   {
     path: 'fs/:path',
-    component: FsComponent,
+    component: MainScreenComponent,
     data: {
       reuse: true
     }

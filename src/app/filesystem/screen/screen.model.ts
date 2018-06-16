@@ -1,4 +1,4 @@
-import { File } from '../files/file.model';
+import { File } from '../file.model';
 
 export class Screen {
   private _isActive: boolean;

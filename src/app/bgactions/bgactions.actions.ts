@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 
-import { addBGProcessAction } from '../store/behavior/action.creators';
+import { addBGProcessAction } from '../store/actions/action.creators';
 import { BGAction } from './bgaction.model';
-import { IAppState } from '../store/state/IAppState';
+import { IAppState } from '../store/IAppState';
 
 @Injectable({
   providedIn: 'root'

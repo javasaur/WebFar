@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 
 import { getNextIndexOrFirst } from '../../utils/CustomFunctions';
-import { IAppState } from '../state/IAppState';
+import { IAppState } from '../IAppState';
 import { switchThemeAction } from './action.creators';
 
 @Injectable({

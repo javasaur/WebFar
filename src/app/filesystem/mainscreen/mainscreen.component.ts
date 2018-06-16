@@ -2,17 +2,17 @@ import { Component, HostListener, OnDestroy, OnInit, Output } from '@angular/cor
 import { NgRedux, select } from '@angular-redux/store';
 import { Router } from '@angular/router';
 
-import { BGAction } from '../bgactions/bgaction.model';
-import { IAppState } from '../store/state/IAppState';
-import { MainService } from '../main.service';
-import { Screen } from './screen.model';
+import { BGAction } from '../../bgactions/bgaction.model';
+import { IAppState } from '../../store/IAppState';
+import { MainService } from '../../main.service';
+import { Screen } from '../screen/screen.model';
 
 @Component({
-  selector: 'app-fs',
-  templateUrl: './fs.component.html',
-  styleUrls: ['./fs.component.scss']
+  selector: 'app-mainscreen',
+  templateUrl: './mainscreen.component.html',
+  styleUrls: ['./mainscreen.component.scss']
 })
-export class FsComponent implements OnInit, OnDestroy {
+export class MainScreenComponent implements OnInit, OnDestroy {
   @select() activeTheme;
   @Output() activeTheme$: string;
   @select() screens;

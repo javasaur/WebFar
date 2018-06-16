@@ -2,14 +2,14 @@ import { Component, OnInit, DoCheck, Input, EventEmitter, Output, OnDestroy } fr
 import { Router } from '@angular/router';
 import { select } from '@angular-redux/store';
 
-import { File } from '../files/file.model';
-import { MainService } from '../main.service';
-import { Screen } from '../fs/screen.model';
+import { File } from '../file.model';
+import { MainService } from '../../main.service';
+import { Screen } from '../screen/screen.model';
 
 @Component({
   selector: 'app-filelist',
   templateUrl: './filelist.component.html',
-  styleUrls: ['./filelist.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss']
+  styleUrls: ['./filelist.component.scss', '../../themes/classic.scss', '../../themes/dark.scss', '../../themes/clumsy.scss']
 })
 export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   // Current filelist and it's content

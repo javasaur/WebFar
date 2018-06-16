@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 
-import { IAppState } from '../state/IAppState';
+import { IAppState } from '../store/IAppState';
 import {
   changeCurrentHandleOptionAction,
   changeCurrentPathAction,
   toggleEditorModeAction,
   toggleErrorAction,
   updateFileStateAction
-} from './action.creators';
-import { getNextIndexOrFirst } from '../../utils/CustomFunctions';
+} from '../store/actions/action.creators';
+import { getNextIndexOrFirst } from '../utils/CustomFunctions';
 
 @Injectable({
   providedIn: 'root'

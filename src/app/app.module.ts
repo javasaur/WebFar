@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
 import { NgModule } from '@angular/core';
 import { NgRedux, NgReduxModule } from '@angular-redux/store';
 import { RouteReuseStrategy } from '@angular/router';
@@ -8,21 +7,21 @@ import { RouteReuseStrategy } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BgactionsComponent } from './bgactions/bgactions.component';
-import { BottomsettingsComponent } from './bottomsettings/bottomsettings.component';
+import { BottomsettingsComponent } from './filesystem/bottomsettings/bottomsettings.component';
 import { CustomRouteReuseStrategy } from './utils/CustomRouteReuseStrategy';
 import { ErrorComponent } from './error/error.component';
-import { FileeditorComponent } from './fileeditor/fileeditor.component';
-import { FilelistComponent } from './filelist/filelist.component';
-import { FsComponent } from './fs/fs.component';
-import { IAppState } from './store/state/IAppState';
-import { INITIAL_STATE, rootReducer } from './store/state/store';
+import { FileeditorComponent } from './filesystem/fileeditor/fileeditor.component';
+import { FilelistComponent } from './filesystem/filelist/filelist.component';
+import { IAppState } from './store/IAppState';
+import { INITIAL_STATE, rootReducer } from './store/store';
+import { MainScreenComponent } from './filesystem/mainscreen/mainscreen.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FilelistComponent,
     ErrorComponent,
-    FsComponent,
+    MainScreenComponent,
     FileeditorComponent,
     BottomsettingsComponent,
     BgactionsComponent,

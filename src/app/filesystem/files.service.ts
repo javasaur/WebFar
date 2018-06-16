@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 
 import { FileBuilder } from './filebuilder';
-import { FilesActions } from '../store/behavior/files.actions';
-import { IAppState } from '../store/state/IAppState';
-import { ScreenActions } from '../store/behavior/screen.actions';
+import { FilesActions } from './files.actions';
+import { IAppState } from '../store/IAppState';
+import { ScreenActions } from './screen.actions';
 
 
 @Injectable({
