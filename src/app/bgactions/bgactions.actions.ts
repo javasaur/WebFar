@@ -14,8 +14,7 @@ export class BGActions {
 
   addBGProcess(process: BGAction) {
     const bgActions = [...this.store.getState().bgActions];
-    bgActions.push(process);
-    console.log(bgActions);
+    bgActions.unshift(process);
     this.store.dispatch(addBGProcessAction(bgActions));
   }
 }
