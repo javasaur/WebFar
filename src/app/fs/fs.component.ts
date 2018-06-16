@@ -1,15 +1,11 @@
-import {ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, Output} from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, Output} from '@angular/core';
 import { Router } from '@angular/router';
 import { NgRedux, select } from '@angular-redux/store';
 
 import { Screen } from './screen.model';
-import { ScreenActions } from '../store/behavior/screen.actions';
-import { FilesActions } from '../store/behavior/files.actions';
 import { IAppState } from '../store/state/IAppState';
-import { ThemeActions } from '../store/behavior/theme.actions';
 import {BGAction} from '../bgactions/bgaction.model';
 import {MainService} from '../main.service';
-import {BufferActions} from '../store/behavior/buffer.actions';
 
 @Component({
   selector: 'app-fs',
@@ -37,28 +33,21 @@ export class FsComponent implements OnInit, OnDestroy {
 
 
   constructor(private store: NgRedux<IAppState>,
-              private filesActions: FilesActions,
-              private themeActions: ThemeActions,
-              private screenActions: ScreenActions,
               private mainService: MainService,
-              private bufferActions: BufferActions,
-              private cdRef: ChangeDetectorRef,
               private _router: Router) {
   }
 
   ngOnInit() {
     this.setSubscriptionToStore();
-    this.screenActions.setupScreens();
+    this.mainService.setupScreens();
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((s) => {
-      s.unsubscribe();
-    });
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   copyFile(target) {
-    const buffer = this.bufferActions.readFromBuffer();
+    const buffer = this.mainService.readFromBuffer();
     this.toggleBGScreen();
     this.mainService.copyFile(buffer, target);
   }
@@ -74,11 +63,11 @@ export class FsComponent implements OnInit, OnDestroy {
 
     if (key === 'Tab') {
       event.preventDefault();
-      this.screenActions.moveToNextScreen();
+      this.mainService.moveToNextScreen();
     }
 
     if (key === 'q') {
-      this.themeActions.switchTheme();
+      this.mainService.switchTheme();
       return;
     }
 
@@ -86,7 +75,7 @@ export class FsComponent implements OnInit, OnDestroy {
   }
 
   moveToScreen(screenId) {
-    this.screenActions.moveToScreen(screenId);
+    this.mainService.moveToScreen(screenId);
   }
 
   navigateToErrorPage() {
@@ -98,7 +87,6 @@ export class FsComponent implements OnInit, OnDestroy {
   }
 
   toggleBGScreen() {
-    console.log('toggling');
     this.showBGActionsScreen = !this.showBGActionsScreen;
   }
 
@@ -112,25 +100,22 @@ export class FsComponent implements OnInit, OnDestroy {
     const sub3 = this.activeScreen.subscribe((screen: Screen) => {
       this.activeScreen$ = screen;
     });
-    const sub4 = this.currentPath.subscribe((path: string) => {
-      // this.currentPath$ = path;
-    });
-    const sub5 = this.pathError.subscribe((error: boolean) => {
+    const sub4 = this.pathError.subscribe((error: boolean) => {
       this.pathError$ = error;
       if (error) {
         this.navigateToErrorPage();
       }
     });
 
-    const sub6 = this.openFilesOption.subscribe((option: string) => {
+    const sub5 = this.openFilesOption.subscribe((option: string) => {
       this.openFilesOption$ = option;
     });
 
-    const sub7 = this.bgActions.subscribe((actions: BGAction[]) => {
+    const sub6 = this.bgActions.subscribe((actions: BGAction[]) => {
       this.bgActions$ = actions;
     })
 
-    this.subscriptions.push.apply(this.subscriptions, [sub1, sub2, sub3, sub4, sub5, sub6, sub7]);
+    this.subscriptions.push.apply(this.subscriptions, [sub1, sub2, sub3, sub4, sub5, sub6]);
   }
 
 }

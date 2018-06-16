@@ -1,9 +1,8 @@
-///<reference path="../../node_modules/@angular/core/src/metadata/lifecycle_hooks.d.ts"/>
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Event, Router, RoutesRecognized } from '@angular/router';
 import { select } from '@angular-redux/store';
 
-import {FilesActions} from './store/behavior/files.actions';
+import {MainService} from './main.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @select() editorMode;
 
   constructor(private _router: Router,
-              private filesActions: FilesActions) {
+              private mainService: MainService) {
   }
 
   ngOnInit() {
@@ -31,7 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!!event && event instanceof RoutesRecognized) {
         const path = event.state.root.firstChild.queryParams.path;
         if (!this.pathError$ && !this.editorMode$) {
-          this.filesActions.changeCurrentPath(path);
+          this.mainService.changeCurrentPath(path);
         }
       }
     });
@@ -44,8 +43,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((s) => {
-      s.unsubscribe();
-    });
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 }

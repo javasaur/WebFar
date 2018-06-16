@@ -2,9 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select } from '@angular-redux/store';
 import { Buffer } from 'buffer';
-
-import { FilesService } from '../files/files.service';
-import { FilesActions } from '../store/behavior/files.actions';
+import {MainService} from '../main.service';
 
 @Component({
   selector: 'app-fileeditor',
@@ -20,10 +18,9 @@ export class FileeditorComponent implements OnInit, OnDestroy {
   activeTheme$: string;
   subscriptions = [];
 
-  constructor(private filesService: FilesService,
-              private _router: Router,
+  constructor(private _router: Router,
               private route: ActivatedRoute,
-              private filesActions: FilesActions) {}
+              private mainService: MainService) {}
 
   ngOnInit() {
     const sub1 = this.activeTheme.subscribe((theme) => {
@@ -32,7 +29,7 @@ export class FileeditorComponent implements OnInit, OnDestroy {
 
     const sub2 = this.route.queryParams.subscribe((params) => {
       this.filename = params.path; // temporary
-      this.filesService.getContentOfFile(params.path).then((data: any) => {
+      this.mainService.getContentOfFile(params.path).then((data: any) => {
         const buffer = JSON.parse(data.content).data;
         this.content = Buffer.from(buffer).toString('utf8').replace(/\n/g, '<br />');
       });
@@ -42,12 +39,10 @@ export class FileeditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((s) => {
-      s.unsubscribe();
-    });
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   disableEditorMode() {
-    this.filesActions.toggleEditorMode();
+    this.mainService.toggleEditorMode();
   }
 }

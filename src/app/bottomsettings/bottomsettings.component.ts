@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 import {FilesActions} from '../store/behavior/files.actions';
+import {MainService} from '../main.service';
 
 @Component({
   selector: 'app-bottomsettings',
@@ -13,12 +14,12 @@ export class BottomsettingsComponent implements OnInit {
   @Input() openFilesOption;
   @Output('openBGScreen') openBGScreenEmitter = new EventEmitter<void>();
 
-  constructor(private filesActions: FilesActions) {}
+  constructor(private mainService: MainService) {}
 
   ngOnInit() {}
 
   changeFileHandleOption() {
-    this.filesActions.changeFileHandleOption();
+    this.mainService.changeFileHandleOption();
   }
 
   openBGScreen() {

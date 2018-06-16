@@ -72,6 +72,10 @@ export class FilesService {
     return this.http.post('http://localhost:3000/file', body).toPromise();
   }
 
+  public changeFileHandleOption() {
+    this.filesActions.changeFileHandleOption();
+  }
+
   public async updateFileState(toFile, screenId, screen) {
     // Don't start load if got path error
     if (this.store.getState().pathError) {
@@ -171,8 +175,21 @@ export class FilesService {
         this.screenActions.initializeScreen(screenId);
       }
       this.filesActions.updateFileState(screenId, file);
+      this._calls++;
     } catch (err) {
       this.filesActions.togglePathError();
     }
+  }
+
+  togglePathError() {
+    this.filesActions.togglePathError();
+  }
+
+  toggleEditorMode() {
+    this.filesActions.toggleEditorMode();
+  }
+
+  changeCurrentPath(path: string) {
+    this.filesActions.changeCurrentPath(path);
   }
 }

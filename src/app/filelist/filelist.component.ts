@@ -2,18 +2,14 @@ import { Component, OnInit, DoCheck, Input, EventEmitter, Output, OnDestroy } fr
 import { select } from '@angular-redux/store';
 import { Router } from '@angular/router';
 
-import { TimeService } from '../time.service';
-import { FilesService } from '../files/files.service';
 import { Screen } from '../fs/screen.model';
 import { File } from '../files/file.model';
-import { FilesActions } from '../store/behavior/files.actions';
-import {BufferActions} from '../store/behavior/buffer.actions';
+import {MainService} from '../main.service';
 
 @Component({
   selector: 'app-filelist',
   templateUrl: './filelist.component.html',
-  styleUrls: ['./filelist.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss'],
-  providers: [FilesService]
+  styleUrls: ['./filelist.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss']
 })
 
 export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
@@ -40,19 +36,16 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   @select() currentPath;
   @select() openFilesOption;
 
-
   // Current screen abstraction and related events
   screen: Screen;
   @Output() moveToThisScreen = new EventEmitter<number>();
   @Output() openBGScreen = new EventEmitter<void>();
   @Output() pasteFileFromBuffer = new EventEmitter<string>();
   @Output() removeFile = new EventEmitter<string>();
+  firstStateCall = true;
   subscriptions = [];
 
-  constructor(private timeService: TimeService,
-              private filesService: FilesService,
-              private filesActions: FilesActions,
-              private bufferActions: BufferActions,
+  constructor(private mainService: MainService,
               private _router: Router) {
   }
 
@@ -80,9 +73,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((s) => {
-      s.unsubscribe();
-    });
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   calculateSummaryStats(): void {
@@ -115,12 +106,12 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   openFile(file: File): void {
     if (file.isFile()) {
       if (this.openFilesOption$ === 'os') {
-        this.filesService.passControlToOS(file);
+        this.mainService.passControlToOS(file);
         return;
       }
 
       if (this.openFilesOption$ === 'app') {
-        this.filesActions.toggleEditorMode();
+        this.mainService.toggleEditorMode();
         this._router.navigateByUrl(`editor?path=${file.path}`);
         return;
       }
@@ -161,7 +152,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
         break;
       case 'c':
         if (e.ctrlKey) {
-          this.bufferActions.writeToBuffer(this.selectedFile.path);
+          this.mainService.writeToBuffer(this.selectedFile.path);
         }
         break;
       case 'v':
@@ -185,9 +176,9 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   setClockAndInterval(obj): void {
-    obj.currentTime = obj.timeService.getCurrentTime();
+    obj.currentTime = obj.mainService.getCurrentTime();
     setInterval(function() {
-      obj.currentTime = obj.timeService.getCurrentTime();
+      obj.currentTime = obj.mainService.getCurrentTime();
     }, 60000);
   }
 
@@ -218,14 +209,12 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
     const sub2 = this.currentPath.subscribe((path) => {
       // Initial state update or active screen
       if ((this.screen.isActive || !this.screen.isInitialised)) {
-        this.filesService.updateFileState(path, this.screenId, this.screen).then(() => {
-          if (this.filesService.calls === 1) {
+        this.mainService.updateFileState(path, this.screenId, this.screen).then(() => {
+          if (this.firstStateCall) {
             // First call
             this.setClockAndInterval(this);
             this.calculateSummaryStats();
-            if (this.isActiveScreen) {
-              this.setCursorAtFirst();
-            }
+            this.firstStateCall = false;
           }
           this.unSelectActiveFile();
           this.setCursorAtFirst();

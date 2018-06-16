@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { select } from '@angular-redux/store';
 
 import { FilesActions } from '../store/behavior/files.actions';
+import {MainService} from '../main.service';
 
 @Component({
   selector: 'app-error',
@@ -17,7 +18,7 @@ export class ErrorComponent implements OnInit, OnDestroy {
   activeTheme$: string;
   subscriptions = [];
 
-  constructor(private filesActions: FilesActions) { }
+  constructor(private mainService: MainService) {}
 
   ngOnInit() {
     const sub1 = this.currentPath.subscribe((path) => {
@@ -32,12 +33,10 @@ export class ErrorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((s) => {
-      s.unsubscribe();
-    });
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   togglePathError() {
-    this.filesActions.togglePathError();
+    this.mainService.togglePathError();
   }
 }
