@@ -14,7 +14,7 @@ import {
 import { IAppState } from './IAppState';
 
 export const INITIAL_STATE: IAppState = {
-  activeTheme: 'classic',
+  activeTheme: 'dark',
   availableThemes: ['classic', 'dark', 'clumsy'],
   screensAmount: 2,
   defaultScreen: 1,

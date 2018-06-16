@@ -1,6 +1,6 @@
 <div class="bgActions" [ngClass]="activeTheme$">
   <div class="closeIcon" (click)="close()">X</div>
-  <div *ngIf="bgActions$.length === 0" class="empty!">No background actions running</div>
+  <div *ngIf="bgActions$.length === 0" class="empty"><div>No background actions running</div></div>
   <table *ngIf="bgActions$.length > 0" border="0" cellpadding="0" cellspacing="0">
     <tr>
       <th>#</th>
@@ -13,10 +13,19 @@
     <tr *ngFor="let action of bgActions$; let i = index">
       <td>{{ i + 1 }}</td>
       <td>{{ action.description }}</td>
-      <td>{{ action.status }}</td>
+      <td>
+        <div class="status important"
+          [class.success]="action.status === 'Finished'"
+          [class.fail]="action.status === 'Failed'">
+          {{ action.status }}
+        </div>
+      </td>
       <td>{{ action.startTime | date:'short' }} </td>
       <td><ng-container *ngIf="!!action.endTime">{{ action.endTime | date:'short' }} </ng-container></td>
-      <td>{{ action?.error }}</td>
+      <td>
+        <ng-container *ngIf="action.error">{{ action.error }}</ng-container>
+        <ng-container *ngIf="!action.error">-</ng-container>
+      </td>
     </tr>
   </table>
 </div>

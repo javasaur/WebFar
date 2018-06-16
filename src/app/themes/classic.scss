@@ -85,9 +85,13 @@ $IMPORTANT: #ffb5bb;
   color: $IMPORTANT;
 }
 
-.class.bgActions {
+.classic.bgActions {
   th, td {
     border-color: $EFFECTS_BORDER;
   }
+}
+
+.classic.bgActions .important {
+  color: $IMPORTANT
 }
 
