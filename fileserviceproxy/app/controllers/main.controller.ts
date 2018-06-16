@@ -2,6 +2,7 @@ import {Router, Request, Response} from 'express';
 import * as path from 'path';
 import * as os from 'os';
 import * as fs from 'fs';
+import * as fsextra from 'fs-extra';
 import {exec} from 'child_process';
 
 const router: Router = Router();
@@ -59,5 +60,26 @@ router.post('/file/', (req: Request, res: Response) => {
   exec('\"' + req.body.path + '\"');
   res.status(200).send({});
 });
+
+router.post('/copy/', (req: Request, res: Response) => {
+  const source = req.body.source;
+  const target = `${req.body.target}/${path.basename(source)}`;
+  setTimeout(  () => {
+    fsextra.copy(source, target)
+      .then(() => res.status(200).send({}))
+      .catch((error) => res.status(400).send({error: error.message}));
+  }, 2500);
+});
+
+router.post('/remove', (req: Request, res: Response) => {
+  const f = req.body.path;
+  setTimeout(() => {
+    fsextra.remove(f)
+      .then(() => res.status(200).send({}))
+      .catch((error) => res.status(400).send({error: error.message}));
+  }, 2500);
+});
+
+
 
 export const MainController: Router = router;

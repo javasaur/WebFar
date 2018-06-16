@@ -74,3 +74,19 @@ $IMPORTANT: #ffa011;
 .dark.fileeditor a {
   color: $FONT;
 }
+
+.dark.bgActions {
+  background-color: $MAIN_COLOR;
+  border-color: $EFFECTS_BORDER;
+  color: $FONT;
+}
+
+.dark.bgActions th {
+  color: $IMPORTANT;
+}
+
+.dark.bgActions {
+  th, td {
+    border-color: $EFFECTS_BORDER;
+  }
+}

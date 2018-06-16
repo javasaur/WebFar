@@ -15,6 +15,7 @@ import { FsComponent } from './fs/fs.component';
 import { CustomRouteReuseStrategy } from './utils/CustomRouteReuseStrategy';
 import { FileeditorComponent } from './fileeditor/fileeditor.component';
 import { BottomsettingsComponent } from './bottomsettings/bottomsettings.component';
+import { BgactionsComponent } from './bgactions/bgactions.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { BottomsettingsComponent } from './bottomsettings/bottomsettings.compone
     FsComponent,
     FileeditorComponent,
     BottomsettingsComponent,
+    BgactionsComponent,
   ],
   imports: [
     BrowserModule,

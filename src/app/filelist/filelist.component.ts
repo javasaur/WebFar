@@ -7,6 +7,7 @@ import { FilesService } from '../files/files.service';
 import { Screen } from '../fs/screen.model';
 import { File } from '../files/file.model';
 import { FilesActions } from '../store/behavior/files.actions';
+import {BufferActions} from '../store/behavior/buffer.actions';
 
 @Component({
   selector: 'app-filelist',
@@ -40,14 +41,18 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   @select() openFilesOption;
 
 
-  // Current screen abstraction and related event
+  // Current screen abstraction and related events
   screen: Screen;
   @Output() moveToThisScreen = new EventEmitter<number>();
+  @Output() openBGScreen = new EventEmitter<void>();
+  @Output() pasteFileFromBuffer = new EventEmitter<string>();
+  @Output() removeFile = new EventEmitter<string>();
   subscriptions = [];
 
   constructor(private timeService: TimeService,
               private filesService: FilesService,
               private filesActions: FilesActions,
+              private bufferActions: BufferActions,
               private _router: Router) {
   }
 
@@ -153,6 +158,15 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
         break;
       case 'Enter':
         this.openFile(this.selectedFile);
+        break;
+      case 'c':
+        this.bufferActions.writeToBuffer(this.selectedFile.path);
+        break;
+      case 'v':
+        this.pasteFileFromBuffer.emit(this.selectedFile.path);
+        break;
+      case 'Delete':
+        this.removeFile.emit(this.selectedFile.path);
         break;
       default:
         break;

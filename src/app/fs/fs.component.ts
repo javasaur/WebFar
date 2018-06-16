@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, Output } from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, Output} from '@angular/core';
 import { Router } from '@angular/router';
 import { NgRedux, select } from '@angular-redux/store';
 
@@ -7,6 +7,9 @@ import { ScreenActions } from '../store/behavior/screen.actions';
 import { FilesActions } from '../store/behavior/files.actions';
 import { IAppState } from '../store/state/IAppState';
 import { ThemeActions } from '../store/behavior/theme.actions';
+import {BGAction} from '../bgactions/bgaction.model';
+import {MainService} from '../main.service';
+import {BufferActions} from '../store/behavior/buffer.actions';
 
 @Component({
   selector: 'app-fs',
@@ -26,11 +29,20 @@ export class FsComponent implements OnInit, OnDestroy {
   @select() pathError;
   @Output() pathError$;
   subscriptions = [];
+  @select() openFilesOption;
+  openFilesOption$: string;
+  showBGActionsScreen = false;
+  @select() bgActions;
+  bgActions$: BGAction[];
+
 
   constructor(private store: NgRedux<IAppState>,
               private filesActions: FilesActions,
               private themeActions: ThemeActions,
               private screenActions: ScreenActions,
+              private mainService: MainService,
+              private bufferActions: BufferActions,
+              private cdRef: ChangeDetectorRef,
               private _router: Router) {
   }
 
@@ -43,6 +55,17 @@ export class FsComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => {
       s.unsubscribe();
     });
+  }
+
+  copyFile(target) {
+    const buffer = this.bufferActions.readFromBuffer();
+    this.toggleBGScreen();
+    this.mainService.copyFile(buffer, target);
+  }
+
+  removeFile(path) {
+    this.toggleBGScreen();
+    this.mainService.removeFile(path);
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -74,6 +97,11 @@ export class FsComponent implements OnInit, OnDestroy {
     this.activeScreen$.event = event;
   }
 
+  toggleBGScreen() {
+    console.log('toggling');
+    this.showBGActionsScreen = !this.showBGActionsScreen;
+  }
+
   setSubscriptionToStore() {
     const sub1 = this.screens.subscribe((screens: Screen[]) => {
       this.screens$ = screens;
@@ -94,7 +122,15 @@ export class FsComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.subscriptions.push.apply(this.subscriptions, [sub1, sub2, sub3, sub4, sub5]);
+    const sub6 = this.openFilesOption.subscribe((option: string) => {
+      this.openFilesOption$ = option;
+    });
+
+    const sub7 = this.bgActions.subscribe((actions: BGAction[]) => {
+      this.bgActions$ = actions;
+    })
+
+    this.subscriptions.push.apply(this.subscriptions, [sub1, sub2, sub3, sub4, sub5, sub6, sub7]);
   }
 
 }

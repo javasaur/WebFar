@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ErrorComponent } from './error/error.component';
 import {FsComponent} from './fs/fs.component';
 import {FileeditorComponent} from './fileeditor/fileeditor.component';
+import {BgactionsComponent} from './bgactions/bgactions.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'editor?:path',
     component: FileeditorComponent
+  },
+  {
+    path: 'bgactions',
+    component: BgactionsComponent
   },
   {
     path: 'error',

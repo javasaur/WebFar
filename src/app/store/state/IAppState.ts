@@ -1,4 +1,5 @@
 import { Screen } from '../../fs/screen.model';
+import {BGAction} from '../../bgactions/bgaction.model';
 
 export interface IAppState {
   activeTheme: string;
@@ -12,4 +13,6 @@ export interface IAppState {
   openFilesOption: string;
   openFilesOptions: string[];
   editorMode: boolean;
+  bgActions: BGAction[];
+  buffer: string | null;
 }

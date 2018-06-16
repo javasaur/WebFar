@@ -4,7 +4,11 @@
                 [keyEvent] = "screen.event"
                 [isActiveScreen]="screen.isActive"
                 [screenId]="i"
-                (moveToThisScreen)="moveToScreen($event)">
+                (moveToThisScreen)="moveToScreen($event)"
+                (openBGScreen)="toggleBGScreen()"
+                (pasteFileFromBuffer)="copyFile($event)"
+                (removeFile)="removeFile($event)">
   </app-filelist>
 </div>
-<app-bottomsettings></app-bottomsettings>
+<app-bottomsettings [openFilesOption]="openFilesOption$" [activeTheme]="activeTheme$" (openBGScreen)="toggleBGScreen()"></app-bottomsettings>
+<app-bgactions [hidden]="!showBGActionsScreen" (closeBGScreen)="toggleBGScreen()"></app-bgactions>

@@ -4,6 +4,7 @@ var express_1 = require("express");
 var path = require("path");
 var os = require("os");
 var fs = require("fs");
+var fsextra = require("fs-extra");
 var child_process_1 = require("child_process");
 var router = express_1.Router();
 router.get('/root', function (req, res) {
@@ -55,6 +56,23 @@ router.post('/content/', function (req, res) {
 router.post('/file/', function (req, res) {
     child_process_1.exec('\"' + req.body.path + '\"');
     res.status(200).send({});
+});
+router.post('/copy/', function (req, res) {
+    var source = req.body.source;
+    var target = req.body.target + "/" + path.basename(source);
+    setTimeout(function () {
+        fsextra.copy(source, target)
+            .then(function () { return res.status(200).send({}); })
+            .catch(function (error) { return res.status(400).send({ error: error.message }); });
+    }, 2500);
+});
+router.post('/remove', function (req, res) {
+    var f = req.body.path;
+    setTimeout(function () {
+        fsextra.remove(f)
+            .then(function () { return res.status(200).send({}); })
+            .catch(function (error) { return res.status(400).send({ error: error.message }); });
+    }, 2500);
 });
 exports.MainController = router;
 //# sourceMappingURL=main.controller.js.map

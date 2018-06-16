@@ -1,5 +1,6 @@
-<ul class="bottom-menu" [ngClass]="activeTheme$">
+<ul class="bottom-menu" [ngClass]="activeTheme">
   <li><span class="important">q</span> - switch theme</li>
   <li><span class="important">TAB</span> - switch screens</li>
-  <li>Open files in <span class="important option" (click)="changeFileHandleOption()">{{ openFilesOption$ | uppercase }}</span></li>
+  <li>Open files in <span class="important option pointer" (click)="changeFileHandleOption()">{{ openFilesOption | uppercase }}</span></li>
+  <li (click)="openBGScreen()" class="important pointer">Background actions</li>
 </ul>

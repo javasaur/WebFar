@@ -25,6 +25,21 @@ export class FilesService {
               private screenActions: ScreenActions) {
   }
 
+  public copyFile(source: string, target: string) {
+    const body = {
+      source,
+      target
+    };
+    return this.http.post('http://localhost:3000/copy', body).toPromise();
+  }
+
+  public removeFile(path: string) {
+    const body = {
+      path
+    };
+    return this.http.post('http://localhost:3000/remove', body).toPromise();
+  }
+
   public getContentOfDir(path) {
     const body = {
       path: path
@@ -159,7 +174,5 @@ export class FilesService {
     } catch (err) {
       this.filesActions.togglePathError();
     }
-
-
   }
 }

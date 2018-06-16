@@ -9,8 +9,22 @@ import {
   TOGGLE_ERROR,
   INITIALIZE_SCREEN,
   CHANGE_CURRENT_HANDLE_OPTION,
-  TOGGLE_EDITOR_MODE
+  TOGGLE_EDITOR_MODE, ADD_BACKGROUND_PROCESS, WRITE_TO_BUFFER
 } from './actions';
+
+export function writeToBufferAction(buffer: string) {
+  return {
+    type: WRITE_TO_BUFFER,
+    buffer
+  };
+}
+
+export function addBGProcessAction(bgActions) {
+  return {
+    type: ADD_BACKGROUND_PROCESS,
+    bgActions
+  };
+}
 
 export function switchThemeAction(newTheme) {
   return {

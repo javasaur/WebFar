@@ -5,9 +5,6 @@ import { select } from '@angular-redux/store';
 
 import {FilesActions} from './store/behavior/files.actions';
 
-
-
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

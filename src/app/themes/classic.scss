@@ -75,3 +75,19 @@ $IMPORTANT: #ffb5bb;
   color: $FONT;
 }
 
+.classic.bgActions {
+  background-color: $MAIN_COLOR;
+  border-color: $EFFECTS_BORDER;
+  color: $FONT;
+}
+
+.classic.bgActions th {
+  color: $IMPORTANT;
+}
+
+.class.bgActions {
+  th, td {
+    border-color: $EFFECTS_BORDER;
+  }
+}
+

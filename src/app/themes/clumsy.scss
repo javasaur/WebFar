@@ -73,3 +73,19 @@ $IMPORTANT: #060370;
 .clumsy.fileeditor a {
   color: $FONT;
 }
+
+.clumsy.bgActions {
+  background-color: $MAIN_COLOR;
+  border-color: $EFFECTS_BORDER;
+  color: $FONT;
+}
+
+.clumsy.bgActions th {
+  color: $IMPORTANT;
+}
+
+.clumsy.bgActions {
+  th, td {
+    border-color: $EFFECTS_BORDER;
+  }
+}

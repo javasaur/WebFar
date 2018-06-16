@@ -5,6 +5,7 @@
     "postinstall": "cd FileServiceProxy && npm i",
     "ng": "ng",
     "start": "concurrently \"ng serve --open\" \"cd fileserviceproxy && npm start\" --kill-others",
+    "dev": "concurrently \"ng serve --open\" \"cd fileserviceproxy && npm run dev\" --kill-others",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
