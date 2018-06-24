@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core
 import { Store } from '@ngrx/store';
 
 import { MainService } from '../../globalservices/main.service';
-import { IAppState } from '../../store/IAppState';
+import {State} from '../../store/store';
 
 @Component({
   selector: 'app-bottomsettings',
@@ -12,21 +12,22 @@ import { IAppState } from '../../store/IAppState';
 export class BottomsettingsComponent implements OnInit, OnDestroy {
   openFilesOption: string
   activeTheme: string;
-  subscription: any
+  subscriptions = [];
   @Output('openBGScreen') openBGScreenEmitter = new EventEmitter<void>();
 
   constructor(private mainService: MainService,
-              private store: Store<IAppState>) {
-    this.subscription = store.select(state => state).subscribe(s => {
-      this.activeTheme = s['app']['activeTheme'];
-      this.openFilesOption = s['app']['openFilesOption'];
-    });
+              private store: Store<State>) {
+
+    const sub1 = this.store.select(state => state.app.activeTheme).subscribe(theme => this.activeTheme = theme);
+    const sub2 = this.store.select(state => state.app.openFilesOption).subscribe(option => this.openFilesOption = option);
+
+    this.subscriptions.push.apply(this.subscriptions, [sub1, sub2]);
   }
 
   ngOnInit() {}
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   changeFileHandleOption() {

@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
 
 import { FileBuilder } from './filebuilder';
 import { FilesActions } from './files.actions';
-import { IAppState } from '../store/IAppState';
 import { ScreenActions } from './screen.actions';
+import {State} from '../store/store';
+import {Store} from '@ngrx/store';
+import {getState} from '../utils/CustomFunctions';
 
 
 @Injectable({
@@ -20,7 +21,7 @@ export class FilesService {
   }
 
   constructor(private http: HttpClient,
-              private store: NgRedux<IAppState>,
+              private store: Store<State>,
               private filesActions: FilesActions,
               private screenActions: ScreenActions) {
   }
@@ -78,7 +79,7 @@ export class FilesService {
 
   public async updateFileState(toFile, screenId, screen) {
     // Don't start load if got path error
-    if (this.store.getState().pathError) {
+    if (getState(this.store).app.pathError) {
       return;
     }
 

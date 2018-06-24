@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
 
-import { IAppState } from '../store/IAppState';
 import {
   changeCurrentHandleOptionAction,
   changeCurrentPathAction,
@@ -9,20 +7,22 @@ import {
   toggleErrorAction,
   updateFileStateAction
 } from '../store/actions/action.creators';
-import { getNextIndexOrFirst } from '../utils/CustomFunctions';
+import {getNextIndexOrFirst, getState} from '../utils/CustomFunctions';
+import {State} from '../store/store';
+import {Store} from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilesActions {
-  constructor(private store: NgRedux<IAppState>) {}
+  constructor(private store: Store<State>) {}
 
   changeCurrentPath(newPath: string) {
     this.store.dispatch(changeCurrentPathAction(newPath));
   }
 
   changeFileHandleOption() {
-    const state = {...this.store.getState()};
+    const state = {...getState(this.store).app};
     let openFilesOption, openFilesOptions;
     ({openFilesOption, openFilesOptions} = state);
     const ind = openFilesOptions.indexOf(openFilesOption);
@@ -31,7 +31,7 @@ export class FilesActions {
   }
 
   updateFileState(screenId, fileState) {
-    const screens = [...this.store.getState().screens];
+    const screens = [...getState(this.store).app.screens];
     const screen = screens[screenId];
     screen.fileState = fileState;
     this.store.dispatch(updateFileStateAction(screens));

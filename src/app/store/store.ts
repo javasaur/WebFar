@@ -1,12 +1,10 @@
-import {Action} from '@ngrx/store';
-
 import {
   ADD_BACKGROUND_PROCESS,
   CHANGE_ACTIVE_SCREEN,
   CHANGE_CURRENT_HANDLE_OPTION,
   CHANGE_CURRENT_PATH,
   INITIALIZE_SCREEN,
-  INITIALIZE_SCREENS,
+  CREATE_SCREENS,
   MOVE_TO_NEXT_SCREEN,
   MOVE_TO_SCREEN,
   SWITCH_THEME,
@@ -33,7 +31,11 @@ export const INITIAL_STATE: IAppState = {
   buffer: null
 };
 
-export function rootReducer(state: IAppState, action): IAppState {
+export interface State {
+  app: IAppState;
+}
+
+export function mainReducer(state: IAppState = INITIAL_STATE, action) {
   switch (action.type) {
     case ADD_BACKGROUND_PROCESS:
       return {...state, bgActions: action.bgActions}
@@ -50,7 +52,7 @@ export function rootReducer(state: IAppState, action): IAppState {
     case INITIALIZE_SCREEN:
       return {...state, screens: action.screens};
 
-    case INITIALIZE_SCREENS:
+    case CREATE_SCREENS:
       return {...state, screens: action.screens};
 
     case MOVE_TO_NEXT_SCREEN:
@@ -74,13 +76,6 @@ export function rootReducer(state: IAppState, action): IAppState {
     case WRITE_TO_BUFFER:
       return {...state, buffer: action.buffer};
 
-    default:
-      return state;
-  }
-}
-
-export function mainReducer(state: IAppState = INITIAL_STATE, action: Action) {
-  switch (action.type) {
     default:
       return state;
   }

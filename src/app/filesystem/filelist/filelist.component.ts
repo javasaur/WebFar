@@ -5,6 +5,8 @@ import { select } from '@angular-redux/store';
 import { File } from '../file.model';
 import { MainService } from '../../globalservices/main.service';
 import { Screen } from '../screen/screen.model';
+import {State} from '../../store/store';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'app-filelist',
@@ -19,7 +21,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   selectedFile: File;
   currentTime: string;
   lastKeyPressTimestamp = 0; // For correct key-events handling
-  openFilesOption$: string;
+  openFilesOption: string;
 
   // Stats for summary block
   sumStatsFolders: number;
@@ -31,9 +33,6 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   @Input() isActiveScreen: boolean;
   @Input() keyEvent: any;
   @Input() screenId: number;
-  @select() screens;
-  @select() currentPath;
-  @select() openFilesOption;
 
   // Current screen abstraction and related events
   screen: Screen;
@@ -45,7 +44,8 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
   subscriptions = [];
 
   constructor(private mainService: MainService,
-              private _router: Router) {
+              private _router: Router,
+              private store: Store<State>) {
   }
 
   ngOnInit() {
@@ -104,12 +104,12 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
 
   openFile(file: File): void {
     if (file.isFile()) {
-      if (this.openFilesOption$ === 'os') {
+      if (this.openFilesOption === 'os') {
         this.mainService.passControlToOS(file);
         return;
       }
 
-      if (this.openFilesOption$ === 'app') {
+      if (this.openFilesOption === 'app') {
         this.mainService.toggleEditorMode();
         this._router.navigateByUrl(`editor?path=${file.path}`);
         return;
@@ -196,7 +196,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
 
   subscribeToStore() {
     // Filestate is stored per screen, so we subscribe to the screens change
-    const sub1 = this.screens.subscribe((screens: Screen[]) => {
+    const sub1 = this.store.select(state => state.app.screens).subscribe(screens => {
       this.screen = [...screens][this.screenId];
       this.currentFolder = this.screen.fileState;
       if (!!this.currentFolder) {
@@ -205,7 +205,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
     });
 
     // Subscribe to the app current path and update filestate
-    const sub2 = this.currentPath.subscribe((path) => {
+    const sub2 = this.store.select(state => state.app.currentPath).subscribe(path => {
       // Initial state update or active screen
       if ((this.screen.isActive || !this.screen.isInitialised)) {
         this.mainService.updateFileState(path, this.screenId, this.screen).then(() => {
@@ -221,7 +221,7 @@ export class FilelistComponent implements OnInit, DoCheck, OnDestroy {
       }
     });
 
-    const sub3 = this.openFilesOption.subscribe((option) => this.openFilesOption$ = option);
+    const sub3 = this.store.select(state => state.app.openFilesOption).subscribe(option => this.openFilesOption = option);
 
     this.subscriptions.push.apply(this.subscriptions, [sub1, sub2, sub3]);
   }

@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
 
 import { BGActionsService } from '../bgactions/bgactions.service';
 import { BufferService } from './buffer.service';
 import { File } from '../filesystem/file.model';
 import { FilesService } from '../filesystem/files.service';
-import { IAppState } from '../store/IAppState';
 import { Screen } from '../filesystem/screen/screen.model';
 import { ScreenService } from '../filesystem/screen/screen.service';
 import { ThemeService } from './theme.service';
 import { TimeService } from './time.service';
+import {State} from '../store/store';
+import {Store} from '@ngrx/store';
+import {getState} from '../utils/CustomFunctions';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class MainService {
               private screenService: ScreenService,
               private timeService: TimeService,
               private themeService: ThemeService,
-              private store: NgRedux<IAppState>) {}
+              private store: Store<State>) {}
 
   async copyFile(source: string, target: string) {
     const bgAction = this.bgActionsService.addBGAction(`Copying from ${source} to ${target}`);
@@ -45,7 +46,7 @@ export class MainService {
   }
 
   async updateAllScreens() {
-    const screens = [...this.store.getState().screens];
+    const screens = [...getState(this.store).app.screens];
     screens.forEach((screen, index) => {
       this.fileService.updateFileState(screen.fileState, index, screen);
     });

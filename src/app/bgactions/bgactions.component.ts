@@ -2,6 +2,10 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { select } from '@angular-redux/store';
 
 import { BGAction } from './bgaction.model';
+import {IAppState} from '../store/IAppState';
+import {State} from '../store/store';
+import {Store} from '@ngrx/store';
+import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'app-bgactions',
@@ -9,19 +13,17 @@ import { BGAction } from './bgaction.model';
   styleUrls: ['./bgactions.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss']
 })
 export class BgactionsComponent implements OnInit, OnDestroy {
-  @select() activeTheme;
-  activeTheme$: string;
-  @select() bgActions;
-  bgActions$: BGAction[];
+  activeTheme: string;
+  bgActions: BGAction[];
   @Output() closeBGScreen = new EventEmitter<void>();
   subscriptions = [];
+  test: any;
 
-  constructor() {}
+  constructor(private store: Store<State>) {}
 
   ngOnInit() {
-    const sub1 = this.activeTheme.subscribe((theme) => this.activeTheme$ = theme);
-    const sub2 = this.bgActions.subscribe((actions) => this.bgActions$ = actions);
-
+    const sub1 = this.store.select(state => state.app.activeTheme).subscribe(theme => this.activeTheme = theme);
+    const sub2 = this.store.select(state => state.app.bgActions).subscribe(actions => this.bgActions = actions);
     this.subscriptions.push.apply(this.subscriptions, [sub1, sub2]);
   }
 

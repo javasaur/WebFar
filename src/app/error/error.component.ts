@@ -2,6 +2,8 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { select } from '@angular-redux/store';
 
 import { MainService } from '../globalservices/main.service';
+import {Store} from '@ngrx/store';
+import {State} from '../store/store';
 
 @Component({
   selector: 'app-error',
@@ -9,18 +11,16 @@ import { MainService } from '../globalservices/main.service';
   styleUrls: ['./error.component.scss', '../themes/classic.scss', '../themes/dark.scss', '../themes/clumsy.scss'],
 })
 export class ErrorComponent implements OnInit, OnDestroy {
-  @Input() themeClass: string;
-  @select() currentPath;
-  @select() activeTheme;
-  path$: string;
-  activeTheme$: string;
+  path: string;
+  activeTheme: string;
   subscriptions = [];
 
-  constructor(private mainService: MainService) {}
+  constructor(private mainService: MainService,
+              private store: Store<State>) {}
 
   ngOnInit() {
-    const sub1 = this.currentPath.subscribe((path) => this.path$ = path);
-    const sub2 = this.activeTheme.subscribe((theme) => this.activeTheme$ = theme);
+    const sub1 = this.store.select(state => state.app.currentPath).subscribe(path => this.path = path);
+    const sub2 = this.store.select(state => state.app.activeTheme).subscribe(theme => this.activeTheme = theme);
 
     this.subscriptions.push.apply(this.subscriptions, [sub1, sub2]);
   }

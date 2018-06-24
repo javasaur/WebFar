@@ -1,6 +1,6 @@
 <div class="screens">
-  <app-filelist *ngFor="let screen of screens$; let i = index"
-                [themeClass]="activeTheme$"
+  <app-filelist *ngFor="let screen of screens; let i = index"
+                [themeClass]="activeTheme"
                 [keyEvent] = "screen.event"
                 [isActiveScreen]="screen.isActive"
                 [screenId]="i"

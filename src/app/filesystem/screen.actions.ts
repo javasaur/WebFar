@@ -1,29 +1,31 @@
 import { Injectable } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
 
-import { IAppState } from '../store/IAppState';
 import { Screen } from './screen/screen.model';
 import {
   changeActiveScreenAction,
-  initializeScreensAction,
+  initializeScreenAction,
+  createScreensAction,
   moveToNextScreenAction,
-  moveToScreenAction} from '../store/actions/action.creators';
-import { getNextIndexOrFirst } from '../utils/CustomFunctions';
+  moveToScreenAction
+} from '../store/actions/action.creators';
+import {getNextIndexOrFirst, getState} from '../utils/CustomFunctions';
+import {State} from '../store/store';
+import {Store} from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScreenActions {
-  constructor(private store: NgRedux<IAppState>) {}
+  constructor(private store: Store<State>) {}
 
   activateDefaultScreen() {
-    this.activateScreen(this.store.getState().defaultScreen);
+    this.activateScreen(getState(this.store).app.defaultScreen);
   }
 
   activateScreen(screenId) {
     let prev, curr;
-    const state = {...this.store.getState()};
-    const screens = [...this.store.getState().screens];
+    const state = {...getState(this.store).app};
+    const screens = [...getState(this.store).app.screens];
 
     ({prev, curr} = definePrevAndCurrScreen(screens, state, screenId - 1));
     toggleActiveProp(prev, curr);
@@ -31,19 +33,19 @@ export class ScreenActions {
   }
 
   initializeScreen(screenId) {
-    const screens = [...this.store.getState().screens];
+    const screens = [...getState(this.store).app.screens];
     screens[screenId].isInitialised = true;
-    this.store.dispatch(initializeScreensAction(screens));
+    this.store.dispatch(initializeScreenAction(screens));
   }
 
-  initializeScreens() {
-    const screens = Array.from({length: this.store.getState().screensAmount}, () => (new Screen()));
-    this.store.dispatch(initializeScreensAction(screens));
+  createScreens() {
+    const screens = Array.from({length: getState(this.store).app.screensAmount}, () => (new Screen()));
+    this.store.dispatch(createScreensAction(screens));
   }
 
   moveToNextScreen() {
     let prev, curr;
-    const state = {...this.store.getState()};
+    const state = {...getState(this.store).app};
     const screens = [...state.screens];
     const ind = screens.indexOf(state.activeScreen);
     const newInd = getNextIndexOrFirst(screens, ind + 1);
@@ -55,7 +57,7 @@ export class ScreenActions {
 
   moveToScreen(screenId) {
     let prev, curr;
-    const state = {...this.store.getState()};
+    const state = {...getState(this.store).app};
     const screens = [...state.screens];
     ({prev, curr} = definePrevAndCurrScreen(screens, state, screenId));
     curr.isDeactivated = false;
@@ -64,7 +66,7 @@ export class ScreenActions {
   }
 
   setupScreens() {
-    this.initializeScreens();
+    this.createScreens();
     this.activateDefaultScreen();
   }
 }

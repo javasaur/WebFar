@@ -1,11 +1,11 @@
 import { Component, HostListener, OnDestroy, OnInit, Output } from '@angular/core';
-import { NgRedux, select } from '@angular-redux/store';
 import { Router } from '@angular/router';
 
 import { BGAction } from '../../bgactions/bgaction.model';
-import { IAppState } from '../../store/IAppState';
 import { MainService } from '../../globalservices/main.service';
 import { Screen } from '../screen/screen.model';
+import {State} from '../../store/store';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'app-mainscreen',
@@ -13,25 +13,17 @@ import { Screen } from '../screen/screen.model';
   styleUrls: ['./mainscreen.component.scss']
 })
 export class MainScreenComponent implements OnInit, OnDestroy {
-  @select() activeTheme;
-  @Output() activeTheme$: string;
-  @select() screens;
-  screens$: Screen[];
-  @select() activeScreen;
-  activeScreen$: Screen;
-  @select() currentPath;
-  @Output() currentPath$: string;
-  @select() pathError;
-  @Output() pathError$;
+  @Output() activeTheme: string;
+  screens: Screen[];
+  activeScreen: Screen;
+  @Output() currentPath: string;
+  @Output() pathError;
   subscriptions = [];
-  @select() openFilesOption;
-  openFilesOption$: string;
+  openFilesOption: string;
   showBGActionsScreen = false;
-  @select() bgActions;
-  bgActions$: BGAction[];
+  bgActions: BGAction[];
 
-
-  constructor(private store: NgRedux<IAppState>,
+  constructor(private store: Store<State>,
               private mainService: MainService,
               private _router: Router) {
   }
@@ -82,7 +74,7 @@ export class MainScreenComponent implements OnInit, OnDestroy {
   }
 
   passEventToActiveScreen(event) {
-    this.activeScreen$.event = event;
+    this.activeScreen.event = event;
   }
 
   toggleBGScreen() {
@@ -90,13 +82,13 @@ export class MainScreenComponent implements OnInit, OnDestroy {
   }
 
   setSubscriptionToStore() {
-    const sub1 = this.screens.subscribe((screens: Screen[]) => this.screens$ = screens);
-    const sub2 = this.activeTheme.subscribe((theme: string) => this.activeTheme$ = theme);
-    const sub3 = this.activeScreen.subscribe((screen: Screen) => this.activeScreen$ = screen);
-    const sub4 = this.openFilesOption.subscribe((option: string) => this.openFilesOption$ = option);
-    const sub5 = this.bgActions.subscribe((actions: BGAction[]) => this.bgActions$ = actions);
-    const sub6 = this.pathError.subscribe((error: boolean) => {
-      this.pathError$ = error;
+    const sub1 = this.store.select(state => state.app.screens).subscribe(screens => this.screens = screens);
+    const sub2 = this.store.select(state => state.app.activeTheme).subscribe(theme => this.activeTheme = theme);
+    const sub3 = this.store.select(state => state.app.activeScreen).subscribe(screen => this.activeScreen = screen);
+    const sub4 = this.store.select(state => state.app.openFilesOption).subscribe(option => this.openFilesOption = option);
+    const sub5 = this.store.select(state => state.app.bgActions).subscribe(actions => this.bgActions = actions);
+    const sub6 = this.store.select(state => state.app.pathError).subscribe(error => {
+      this.pathError = error;
       if (error) {
         this.navigateToErrorPage();
       }

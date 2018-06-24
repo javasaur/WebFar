@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { Buffer } from 'buffer';
-import { IAppState } from '../../store/IAppState';
 import { MainService } from '../../globalservices/main.service';
+import {State} from '../../store/store';
 
 @Component({
   selector: 'app-fileeditor',
@@ -21,10 +21,10 @@ export class FileeditorComponent implements OnInit, OnDestroy {
   constructor(private _router: Router,
               private route: ActivatedRoute,
               private mainService: MainService,
-              private store: Store<IAppState>) {}
+              private store: Store<State>) {}
 
   ngOnInit() {
-    const sub1 = this.store.select(state => state).subscribe(s => this.activeTheme = s['app']['activeTheme']);
+    const sub1 = this.store.select(state => state.app.activeTheme).subscribe(theme => this.activeTheme = theme);
 
     const sub2 = this.route.queryParams.subscribe((params) => {
       this.filename = params.path; // temporary

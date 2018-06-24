@@ -4,7 +4,7 @@ import {
   CHANGE_CURRENT_HANDLE_OPTION,
   CHANGE_CURRENT_PATH,
   INITIALIZE_SCREEN,
-  INITIALIZE_SCREENS,
+  CREATE_SCREENS,
   MOVE_TO_NEXT_SCREEN,
   MOVE_TO_SCREEN,
   SWITCH_THEME,
@@ -61,12 +61,12 @@ export function initializeScreenAction(screens) {
   return {
     type: INITIALIZE_SCREEN,
     screens
-  }
+  };
 }
 
-export function initializeScreensAction(screens) {
+export function createScreensAction(screens) {
   return {
-    type: INITIALIZE_SCREENS,
+    type: CREATE_SCREENS,
     screens
   };
 }

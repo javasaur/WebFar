@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { NgRedux, NgReduxModule } from '@angular-redux/store';
 import { RouteReuseStrategy } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment'; // Angular CLI environemnt
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,8 +15,6 @@ import { CustomRouteReuseStrategy } from './utils/CustomRouteReuseStrategy';
 import { ErrorComponent } from './error/error.component';
 import { FileeditorComponent } from './filesystem/fileeditor/fileeditor.component';
 import { FilelistComponent } from './filesystem/filelist/filelist.component';
-import { IAppState } from './store/IAppState';
-import { INITIAL_STATE, rootReducer} from './store/store';
 import { MainScreenComponent } from './filesystem/mainscreen/mainscreen.component';
 import { mainReducer } from './store/store';
 
@@ -34,7 +34,11 @@ import { mainReducer } from './store/store';
     HttpClientModule,
     NgReduxModule,
     AppRoutingModule,
-    StoreModule.forRoot({app: mainReducer}, {})
+    StoreModule.forRoot({app: mainReducer}),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production
+    })
   ],
   providers: [{
    provide: RouteReuseStrategy,
@@ -44,7 +48,5 @@ import { mainReducer } from './store/store';
 })
 
 export class AppModule {
-  constructor(store: NgRedux<IAppState>) {
-    store.configureStore(rootReducer, INITIAL_STATE);
-  }
+  constructor() {}
 }
